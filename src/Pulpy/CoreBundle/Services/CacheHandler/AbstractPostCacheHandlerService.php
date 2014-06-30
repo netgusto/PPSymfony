@@ -7,7 +7,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\ORM\EntityManager;
 
 use Pulpy\CoreBundle\Entity\AbstractPost,
-    Pulpy\CoreBundle\Repository\PostRepository,
+    Pulpy\CoreBundle\Services\Post\PostRepository,
     Pulpy\CoreBundle\Services\Context\CultureService,
     Pulpy\CoreBundle\Services\Context\SystemStatusService,
     Pulpy\CoreBundle\Services\PostFile\PostFileRepositoryService,

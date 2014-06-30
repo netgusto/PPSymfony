@@ -2,8 +2,7 @@
 
 namespace Pulpy\CoreBundle\Controller;
 
-use Silex\Application,
-    Symfony\Component\HttpFoundation\Request,
+use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response,
     Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -11,7 +10,7 @@ use \Suin\RSSWriter\Feed,
     \Suin\RSSWriter\Channel,
     \Suin\RSSWriter\Item;
 
-use Pulpy\CoreBundle\Repository\PostRepository,
+use Pulpy\CoreBundle\Services\Post\PostRepository,
     Pulpy\CoreBundle\Services\Config\SiteConfigService,
     Pulpy\CoreBundle\Services\Post\PostSerializerService,
     Pulpy\CoreBundle\Services\Post\PostResourceResolverService,
@@ -39,7 +38,7 @@ class FeedController {
         $this->siteconfig = $siteconfig;
     }
 
-    public function indexAction(Request $request, Application $app) {
+    public function indexAction(Request $request) {
 
         $feed = new Feed();
         $channel = new Channel();

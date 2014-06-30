@@ -24,5 +24,8 @@ class PulpyCoreExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        # Loading platform based on environment
+        #$loader->load('platform.paas.services.yml');
     }
 }

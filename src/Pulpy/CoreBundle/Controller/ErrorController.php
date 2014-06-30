@@ -2,8 +2,7 @@
 
 namespace Pulpy\CoreBundle\Controller;
 
-use Silex\Application,
-    Symfony\Component\HttpFoundation\Request,
+use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response,
     Twig_Environment;
 
@@ -15,11 +14,11 @@ class ErrorController {
         $this->twig = $twig;
     }
 
-    public function notFoundAction(Request $request, Application $app, \Exception $e, $code) {
-        return $this->twig->render('@PulpyTheme/Error/error.notfound.html.twig');
+    public function notFoundAction(Request $request, \Exception $e, $code) {
+        return new Response($this->twig->render('@PulpyTheme/Error/error.notfound.html.twig'));
     }
 
-    public function errorAction(Request $request, Application $app, \Exception $e, $code) {
-        return $this->twig->render('@PulpyTheme/Error/error.generic.html.twig');
+    public function errorAction(Request $request, \Exception $e, $code) {
+        return new Response($this->twig->render('@PulpyTheme/Error/error.generic.html.twig'));
     }
 }

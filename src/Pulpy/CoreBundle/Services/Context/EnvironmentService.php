@@ -2,8 +2,6 @@
 
 namespace Pulpy\CoreBundle\Services\Context;
 
-use Silex\Application;
-
 use Symfony\Component\HttpFoundation\Request;
 
 use josegonzalez\Dotenv;

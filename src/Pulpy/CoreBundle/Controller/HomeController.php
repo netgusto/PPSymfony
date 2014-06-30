@@ -43,15 +43,15 @@ class HomeController {
 
             $post = new Post();
             $post->setTitle('Oh no ! not a single post to display !');
-            $post->setSlug('');
+            $post->setSlug('#');
             $post->setIntro("It looks like you don't have any post in your blog yet. To add a post, create a file in `data/posts`.");
             $post->setAuthor($this->siteconfig->getOwnername());
             $post->setDate($date);
             $post->setComments(FALSE);
 
-            return $this->twig->render('@PulpyTheme/Post/index.html.twig', array(
+            return new Response($this->twig->render('@PulpyTheme/Post/index.html.twig', array(
                 'post' => $post,
-            ));
+            )));
         }
         
         $nbpages = ceil($nbposts / $this->postsperpage);
@@ -61,10 +61,10 @@ class HomeController {
             return new RedirectResponse($this->router->generate('home'));
         }
 
-        return $this->twig->render('@PulpyTheme/Home/index.html.twig', array(
+        return new Response($this->twig->render('@PulpyTheme/Home/index.html.twig', array(
             'posts' => $posts,
             'page' => $page,
             'nbpages' => $nbpages,
-        ));
+        )));
     }
 }

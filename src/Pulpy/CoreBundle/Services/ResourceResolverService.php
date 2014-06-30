@@ -2,7 +2,8 @@
 
 namespace Pulpy\CoreBundle\Services;
 
-use Pulpy\CoreBundle\Services\PersistentStorage\PersistentStorageServiceInterface;
+use Pulpy\CoreBundle\Services\PersistentStorage\PersistentStorageServiceInterface,
+    Pulpy\CoreBundle\Entity\AbstractPost;
 
 class ResourceResolverService {
     
@@ -25,6 +26,16 @@ class ResourceResolverService {
         return $this->fs->getOne($filepath);
 
         return $filepath;
+    }
+
+    public function urlForResourceName($name) {
+        
+        $file = $this->fileForResourceName($name);
+        if(is_null($file)) {
+            return null;
+        }
+
+        return $this->fs->getUrl($file);
     }
 
     public function isFilepathLegit($filepath) {

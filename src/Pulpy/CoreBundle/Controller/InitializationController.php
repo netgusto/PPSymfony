@@ -2,8 +2,7 @@
 
 namespace Pulpy\CoreBundle\Controller;
 
-use Silex\Application,
-    Symfony\Component\HttpFoundation\Request,
+use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response,
     Symfony\Component\HttpFoundation\RedirectResponse,
     Symfony\Component\Routing\Generator\UrlGenerator,
@@ -27,24 +26,29 @@ class InitializationController {
     protected $urlgenerator;
     protected $formfactory;
     protected $em;
+    protected $appversion;
+    protected $passwordencoder_factory;
 
     public function __construct(
         Twig_Environment $twig,
         PulpyServices\Context\EnvironmentService $environment,
         UrlGenerator $urlgenerator,
         FormFactory $formfactory,
-        EntityManager $em
+        EntityManager $em,
+        $appversion,
+        ddd $passwordencoder_factory
     ) {
         $this->twig = $twig;
         $this->environment = $environment;
         $this->urlgenerator = $urlgenerator;
         $this->formfactory = $formfactory;
         $this->em = $em;
+        $this->appversion = $appversion;
+        $this->passwordencoder_factory = $passwordencoder_factory;
     }
 
     public function reactToExceptionAction(
         Request $request,
-        Application $app,
         PulpyException\InitializationNeeded\InitializationNeededExceptionInterface $e
     ) {
 
@@ -73,14 +77,12 @@ class InitializationController {
 
         return $this->$action(
             $request,
-            $app,
             $e
         );
     }
 
     public function proceedWithInitializationRequestAction(
         Request $request,
-        Application $app,
         PulpyException\InitializationNeeded\InitializationNeededExceptionInterface $e
     ) {
 
@@ -93,46 +95,46 @@ class InitializationController {
             $createdb = ($e instanceOf PulpyException\InitializationNeeded\DatabaseMissingInitializationNeededException);
             $createschema = $createdb || ($e instanceOf PulpyException\InitializationNeeded\DatabaseEmptyInitializationNeededException);
 
-            return $this->welcomeAction($request, $app, array(
+            return $this->welcomeAction($request, array(
                 'createdb' => $createdb,
                 'createschema' => $createschema,
             ));
         }
 
         if($request->attributes->get('_route') === '_init_step1_createdb') {
-            return $this->step1CreateDbAction($request, $app);
+            return $this->step1CreateDbAction($request);
         }
 
         if($request->attributes->get('_route') === '_init_step1_createschema') {
-            return $this->step1CreateSchemaAction($request, $app);
+            return $this->step1CreateSchemaAction($request);
         }
 
         if($request->attributes->get('_route') === '_init_step2') {
-            return $this->step2Action($request, $app);
+            return $this->step2Action($request);
         }
 
         if($request->attributes->get('_route') === '_init_finish') {
-            return $this->finishAction($request, $app);
+            return $this->finishAction($request);
         }
     }
 
 
-    public function databaseMissingAction(Request $request, Application $app, PulpyException\InitializationNeeded\DatabaseMissingInitializationNeededException $e) {
+    public function databaseMissingAction(Request $request, PulpyException\InitializationNeeded\DatabaseMissingInitializationNeededException $e) {
         return new RedirectResponse($this->urlgenerator->generate('_init_welcome'));
     }
 
-    public function databaseEmptyAction(Request $request, Application $app, PulpyException\InitializationNeeded\DatabaseEmptyInitializationNeededException $e) {
+    public function databaseEmptyAction(Request $request, PulpyException\InitializationNeeded\DatabaseEmptyInitializationNeededException $e) {
         return new RedirectResponse($this->urlgenerator->generate('_init_welcome'));
     }
 
-    public function systemStatusMarkedAsUninitializedAction(Request $request, Application $app, PulpyException\InitializationNeeded\SystemStatusMarkedAsUninitializedInitializationNeededException $e) {
+    public function systemStatusMarkedAsUninitializedAction(Request $request, PulpyException\InitializationNeeded\SystemStatusMarkedAsUninitializedInitializationNeededException $e) {
         # System status exists, but marked as unitialized
         # It means that the initialization process has not passed step 2 yet
         
         return new RedirectResponse($this->urlgenerator->generate('_init_step2'));
     }
 
-    public function welcomeAction(Request $request, Application $app, $tasks = array()) {
+    public function welcomeAction(Request $request, $tasks = array()) {
 
         if($this->environment->getInitializationMode() !== TRUE) {
             return new Response('Initialization mode off. Access denied.', 401);
@@ -148,12 +150,12 @@ class InitializationController {
             $nextroute = '_init_step2';
         }
 
-        return $this->twig->render('@PulpyCore/Initialization/welcome.html.twig', array(
+        return new Response($this->twig->render('@PulpyCore/Initialization/welcome.html.twig', array(
             'nextroute' => $nextroute,
-        ));
+        )));
     }
 
-    public function step1CreateDbAction(Request $request, Application $app) {
+    public function step1CreateDbAction(Request $request) {
         
         $form = $this->formfactory->create(new FormType\WelcomeStep1Type());
         $form->handleRequest($request);
@@ -162,18 +164,18 @@ class InitializationController {
             # The database is created and initialized
             $this->createDatabase($this->em->getConnection());
             $this->createSchema($this->em);
-            $this->createSystemStatus($this->em, $app['version']);
-            $this->createSiteConfig($this->em, $app['environment']);
+            $this->createSystemStatus($this->em, $this->appversion);
+            $this->createSiteConfig($this->em, $this->environment);
 
             return new RedirectResponse($this->urlgenerator->generate('_init_step2'));
         }
 
-        return $this->twig->render('@PulpyCore/Initialization/init_step1_createdb.html.twig', array(
+        return new Response($this->twig->render('@PulpyCore/Initialization/init_step1_createdb.html.twig', array(
             'form' => $form->createView(),
-        ));
+        )));
     }
 
-    public function step1CreateSchemaAction(Request $request, Application $app) {
+    public function step1CreateSchemaAction(Request $request) {
         
         $form = $this->formfactory->create(new FormType\WelcomeStep1Type());
         $form->handleRequest($request);
@@ -181,18 +183,18 @@ class InitializationController {
         if($form->isValid()) {
             # The schemas are created
             $this->createSchema($this->em);
-            $this->createSystemStatus($this->em, $app['version']);
-            $this->createSiteConfig($this->em, $app['environment']);
+            $this->createSystemStatus($this->em, $this->appversion);
+            $this->createSiteConfig($this->em, $this->environment);
 
             return new RedirectResponse($this->urlgenerator->generate('_init_step2'));
         }
 
-        return $this->twig->render('@PulpyCore/Initialization/init_step1_createschema.html.twig', array(
+        return new Response($this->twig->render('@PulpyCore/Initialization/init_step1_createschema.html.twig', array(
             'form' => $form->createView(),
-        ));
+        )));
     }
 
-    public function step2Action(Request $request, Application $app) {
+    public function step2Action(Request $request) {
         
         $form = $this->formfactory->create(new FormType\WelcomeStep2Type());
         $form->handleRequest($request);
@@ -205,7 +207,7 @@ class InitializationController {
             $user->setSalt(md5(rand() . microtime()));
             $user->setRoles(array('ROLE_ADMIN'));
             $user->setPassword(
-                $app['security.encoder_factory']
+                $this->passwordencoder_factory
                     ->getEncoder($user)
                     ->encodePassword(
                         $data['password'],
@@ -222,13 +224,13 @@ class InitializationController {
             return new RedirectResponse($this->urlgenerator->generate('_init_finish'));
         }
 
-        return $this->twig->render('@PulpyCore/Initialization/init_step2.html.twig', array(
+        return new Response($this->twig->render('@PulpyCore/Initialization/init_step2.html.twig', array(
             'form' => $form->createView(),
-        ));
+        )));
     }
 
-    public function finishAction(Request $request, Application $app) {
-        return $this->twig->render('@PulpyCore/Initialization/init_finish.html.twig');
+    public function finishAction(Request $request) {
+        return new Response($this->twig->render('@PulpyCore/Initialization/init_finish.html.twig'));
     }
 
     /* Utilitary functions */

@@ -2,11 +2,10 @@
 
 namespace Pulpy\CoreBundle\Controller;
 
-use Silex\Application,
-    Symfony\Component\HttpFoundation\Request,
+use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\JsonResponse;
 
-use Pulpy\CoreBundle\Repository\PostRepository,
+use Pulpy\CoreBundle\Services\Post\PostRepository,
     Pulpy\CoreBundle\Services\Post\PostSerializerService,
     Pulpy\CoreBundle\Exception;
 
@@ -20,7 +19,7 @@ class JsonController {
         $this->postserializer = $postserializer;
     }
 
-    public function indexAction(Request $request, Application $app) {
+    public function indexAction(Request $request) {
 
         $res = array();
 
@@ -35,12 +34,12 @@ class JsonController {
         return $response;
     }
 
-    public function postAction(Request $request, Application $app, $slug) {
+    public function postAction(Request $request, $slug) {
         $post = $this->postRepo->findOneBySlug($slug);
         if(!$post) {
             throw new Exception\PostNotFoundException('Post with slug ' . $slug . ' does not exist.');
         }
 
-        return new JsonResponse($this->postserializer->serialize($post, $app));
+        return new JsonResponse($this->postserializer->serialize($post));
     }
 }

@@ -60,6 +60,12 @@ class PulpyExtension extends \Twig_Extension {
         return 'pulpy';
     }
 
+    public function getGlobals() {
+        return array(
+            'site' => $this->siteconfig,
+        );
+    }
+
     public function getFilters() {
         return array(
             'markdown' => new \Twig_Filter_Method($this, 'markdown', array('is_safe' => array('html'))),

@@ -1,0 +1,31 @@
+### PLATFORM: Classic
+
+services:
+
+    config.loader.filebacked:
+        class: Pulpy\CoreBundle\Services\Config\Loader\FileBackedConfigLoaderService
+        arguments:
+            - { data.dir: 'data' }
+
+    config.site:
+        class: Pulpy\CoreBundle\Services\Config\SiteConfigService
+        arguments:
+            - @=service('config.loader.filebacked').load(parameter('rootdir') ~ '/app/config/app.yml')
+
+    fs.persistent:
+        class: Pulpy\CoreBundle\Services\PersistentStorage\LocalFSPersistentStorageService
+        arguments:
+            - @=service('environment').getRootDir()
+            - @=service('environment').getSiteUrl()
+
+    post.cachehandler:
+        class: Pulpy\CoreBundle\Services\CacheHandler\LastModifiedPostCacheHandlerService
+        arguments:
+            - @fs.persistent
+            - @system.status
+            - @postfile.repository
+            - @post.repository
+            - @postfile.topostconverter
+            - @doctrine.orm.entity_manager
+            - @=service('config.site').getPostsDir()
+            - @culture

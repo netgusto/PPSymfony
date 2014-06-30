@@ -2,11 +2,11 @@
 
 namespace Pulpy\CoreBundle\Controller;
 
-use Silex\Application,
-    Symfony\Component\HttpFoundation\Request,
+use Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\HttpFoundation\Response,
     Twig_Environment;
 
-use Pulpy\CoreBundle\Repository\PostRepository,
+use Pulpy\CoreBundle\Services\Post\PostRepository,
     Pulpy\CoreBundle\Services\PostFile\PostFileResolverService,
     Pulpy\CoreBundle\Exception;
 
@@ -22,7 +22,7 @@ class PostController {
         $this->postresolver = $postresolver;
     }
 
-    public function indexAction(Request $request, Application $app, $slug) {
+    public function indexAction(Request $request, $slug) {
 
         $post = $this->postRepo->findOneBySlug($slug);
         if(!$post) {
@@ -35,11 +35,11 @@ class PostController {
         $previouspost = $this->postRepo->findPrevious($post);
         #var_dump($previouspost);
 
-        return $this->twig->render('@PulpyTheme/Post/index.html.twig', array(
+        return new Response($this->twig->render('@PulpyTheme/Post/index.html.twig', array(
             'post' => $post,
             'posts' => $posts,
             'nextpost' => $nextpost,
             'previouspost' => $previouspost,
-        ));
+        )));
     }
 }

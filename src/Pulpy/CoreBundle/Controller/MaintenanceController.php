@@ -2,8 +2,7 @@
 
 namespace Pulpy\CoreBundle\Controller;
 
-use Silex\Application,
-    Symfony\Component\HttpFoundation\Request,
+use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response,
     Twig_Environment;
 
@@ -18,7 +17,7 @@ class MaintenanceController {
         $this->twig = $twig;
     }
 
-    public function reactToExceptionAction(Request $request, Application $app, PulpyException\MaintenanceNeeded\MaintenanceNeededExceptionInterface $e) {
+    public function reactToExceptionAction(Request $request, PulpyException\MaintenanceNeeded\MaintenanceNeededExceptionInterface $e) {
 
         /*
             Maintenance actions are not yet implemented in Pulpy;
@@ -54,39 +53,38 @@ class MaintenanceController {
 
         return $this->$action(
             $request,
-            $app,
             $e
         );*/
     }
 
-    public function proceedWithRequestAction(Request $request, Application $app, PulpyException\MaintenanceNeeded\MaintenanceNeededExceptionInterface $e) {
+    public function proceedWithRequestAction(Request $request, PulpyException\MaintenanceNeeded\MaintenanceNeededExceptionInterface $e) {
         /*
             Maintenance routes are not yet defined in Pulpy;
             TODO: Implement maintenance routes and map them here
         */
     }
 
-    public function databaseInvalidCredentialsAction(Request $request, Application $app, PulpyException\MaintenanceNeeded\DatabaseInvalidCredentialsMaintenanceNeededException $e) {
-        return $this->twig->render('@PulpyCore/Maintenance/databaseinvalidcredentials.html.twig');
+    public function databaseInvalidCredentialsAction(Request $request, PulpyException\MaintenanceNeeded\DatabaseInvalidCredentialsMaintenanceNeededException $e) {
+        return new Response($this->twig->render('@PulpyCore/Maintenance/databaseinvalidcredentials.html.twig'));
     }
 
-    public function databaseUpdateAction(Request $request, Application $app, PulpyException\MaintenanceNeeded\DatabaseUpdateMaintenanceNeededException $e) {
-        return $this->twig->render('@PulpyCore/Maintenance/databaseupdate.html.twig');
+    public function databaseUpdateAction(Request $request, PulpyException\MaintenanceNeeded\DatabaseUpdateMaintenanceNeededException $e) {
+        return new Response($this->twig->render('@PulpyCore/Maintenance/databaseupdate.html.twig'));
     }
 
-    public function administrativeAccountMissingAction(Request $request, Application $app, PulpyException\MaintenanceNeeded\AdministrativeAccountMissingMaintenanceNeededException $e) {
-        return $this->twig->render('@PulpyCore/Maintenance/administrativeaccountmissing.html.twig');
+    public function administrativeAccountMissingAction(Request $request, PulpyException\MaintenanceNeeded\AdministrativeAccountMissingMaintenanceNeededException $e) {
+        return new Response($this->twig->render('@PulpyCore/Maintenance/administrativeaccountmissing.html.twig'));
     }
 
-    public function systemStatusMissingAction(Request $request, Application $app, PulpyException\MaintenanceNeeded\SystemStatusMissingMaintenanceNeededException $e) {
-        return $this->twig->render('@PulpyCore/Maintenance/systemstatusmissing.html.twig');
+    public function systemStatusMissingAction(Request $request, PulpyException\MaintenanceNeeded\SystemStatusMissingMaintenanceNeededException $e) {
+        return new Response($this->twig->render('@PulpyCore/Maintenance/systemstatusmissing.html.twig'));
     }
 
-    public function siteConfigFileMissingAction(Request $request, Application $app, PulpyException\MaintenanceNeeded\SiteConfigFileMissingMaintenanceNeededException $e) {
-        return $this->twig->render('@PulpyCore/Maintenance/siteconfigfilemissing.html.twig');
+    public function siteConfigFileMissingAction(Request $request, PulpyException\MaintenanceNeeded\SiteConfigFileMissingMaintenanceNeededException $e) {
+        return new Response($this->twig->render('@PulpyCore/Maintenance/siteconfigfilemissing.html.twig'));
     }
 
-    public function unknownMaintenanceTaskAction(Request $request, Application $app, PulpyException\MaintenanceNeeded\MaintenanceNeededExceptionInterface $e) {
-        return $this->twig->render('@PulpyCore/Maintenance/unknownmaintenancetask.html.twig');
+    public function unknownMaintenanceTaskAction(Request $request, PulpyException\MaintenanceNeeded\MaintenanceNeededExceptionInterface $e) {
+        return new Response($this->twig->render('@PulpyCore/Maintenance/unknownmaintenancetask.html.twig'));
     }
 }

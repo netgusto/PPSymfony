@@ -1,4 +1,12 @@
+#imports:
+#    - { resource: platform.paas.services.yml }
+
 services:
+
+    twig.extension.text:
+        class: Twig_Extensions_Extension_Text
+        tags:
+            - { name: twig.extension }
 
     scalar.interpreter:
         class: Pulpy\CoreBundle\Services\ScalarInterpreterService
@@ -15,57 +23,10 @@ services:
             - @scalar.interpreter
             - %rootdir%
 
-    ### PLATFORM: Classic
     system.status:
-        class: Pulpy\CoreBundle\Services\Context\EnvironmentService
-
-    config.loader.filebacked:
-        class: Pulpy\CoreBundle\Services\Config\Loader\FileBackedConfigLoaderService
+        class: Pulpy\CoreBundle\Services\Context\SystemStatusService
         arguments:
-            - { data.dir: data }
-
-    config.site:
-        class: Pulpy\CoreBundle\Services\Config\SiteConfigService
-        arguments:
-            - @=service('config.loader.filebacked').load(parameter('rootdir') ~ '/config/app.yml')
-
-    fs.persistent:
-        class: Pulpy\CoreBundle\Services\PersistentStorage\LocalFSPersistentStorageService
-        arguments:
-            - @=service('environment').getRootDir()
-            - @=service('environment').getSiteUrl()
-
-    resource.resolver:
-        class: Pulpy\CoreBundle\Services\ResourceResolverService
-        arguments:
-            - @fs.persistent
-            - @=service('config.site').getResourcesDir()
-
-    post.resource.resolver:
-        class: Pulpy\CoreBundle\Services\Post\PostResourceResolverService
-        arguments:
-            - @fs.persistent
-            - @=service('config.site').getResourcesDir()
-
-    postfile.resolver:
-        class: Pulpy\CoreBundle\Services\PostFile\PostFileResolverService
-        arguments:
-            - @=service('config.site').getPostsDir()
-            - @=service('config.site').getPostsExtension()
-
-    post.cachehandler:
-        class: Pulpy\CoreBundle\Services\CacheHandler\LastModifiedPostCacheHandlerService
-        arguments:
-            - @fs.persistent
-            - @system.status
-            - @postfile.repository
-            - @post.repository
-            - @postfile.topostconverter
             - @doctrine.orm.entity_manager
-            - @=service('config.site').getPostsDir()
-            - @culture
-
-    ### /PLATFORM: Classic
 
     url.absolutizer:
         class: Pulpy\CoreBundle\Services\URLAbsolutizerService
@@ -147,6 +108,24 @@ services:
             - @post.resource.resolver
             - @culture
 
+    resource.resolver:
+        class: Pulpy\CoreBundle\Services\ResourceResolverService
+        arguments:
+            - @fs.persistent
+            - @=service('config.site').getResourcesDir()
+
+    post.resource.resolver:
+        class: Pulpy\CoreBundle\Services\Post\PostResourceResolverService
+        arguments:
+            - @fs.persistent
+            - @=service('config.site').getResourcesDir()
+
+    postfile.resolver:
+        class: Pulpy\CoreBundle\Services\PostFile\PostFileResolverService
+        arguments:
+            - @=service('config.site').getPostsDir()
+            - @=service('config.site').getPostsExtension()
+
     ### Controllers
 
     home.controller:
@@ -195,3 +174,5 @@ services:
             - @router
             - @form.factory
             - @doctrine.orm.entity_manager
+            - %appversion%
+            - @security.encoder_factory
