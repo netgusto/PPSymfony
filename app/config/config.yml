@@ -28,6 +28,10 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    paths:
+        "%kernel.root_dir%/../src/Pulpy/CoreBundle/Resources/views": PulpyCore
+        #"%kernel.root_dir%/../src/Pulpy/AdminBundle/Resources/views": PulpyAdmin
+        "%kernel.root_dir%/../vendor/%theme%/views": PulpyTheme
 
 # Assetic Configuration
 assetic:

@@ -4,8 +4,181 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0f5bf28fac35560dbdb2e597d32df056",
+    "hash": "fc334190c255bfdf39301c238fb371ca",
     "packages": [
+        {
+            "name": "aws/aws-sdk-php",
+            "version": "2.6.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aws/aws-sdk-php.git",
+                "reference": "930f73e41dd68001a528f2b2ebbe657c764552c4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/930f73e41dd68001a528f2b2ebbe657c764552c4",
+                "reference": "930f73e41dd68001a528f2b2ebbe657c764552c4",
+                "shasum": ""
+            },
+            "require": {
+                "guzzle/guzzle": ">=3.7.0,<=3.9.9",
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "doctrine/cache": "~1.0",
+                "ext-openssl": "*",
+                "monolog/monolog": "1.4.*",
+                "phpunit/phpunit": "4.*",
+                "symfony/class-loader": "2.*",
+                "symfony/yaml": "2.*"
+            },
+            "suggest": {
+                "doctrine/cache": "Adds support for caching of credentials and responses",
+                "ext-apc": "Allows service description opcode caching, request and response caching, and credentials caching",
+                "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages",
+                "monolog/monolog": "Adds support for logging HTTP requests and responses",
+                "symfony/yaml": "Eases the ability to write manifests for creating jobs in AWS Import/Export"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Aws": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Amazon Web Services",
+                    "homepage": "http://aws.amazon.com"
+                }
+            ],
+            "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
+            "homepage": "http://aws.amazon.com/sdkforphp",
+            "keywords": [
+                "amazon",
+                "aws",
+                "cloud",
+                "dynamodb",
+                "ec2",
+                "glacier",
+                "s3",
+                "sdk"
+            ],
+            "time": "2014-06-13 01:05:04"
+        },
+        {
+            "name": "backbonejs/backbonejs",
+            "version": "1.1.2",
+            "dist": {
+                "type": "file",
+                "url": "http://backbonejs.org/backbone.js",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
+            "name": "brianium/habitat",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/brianium/habitat.git",
+                "reference": "d0979e3bb379cbc78ecb42b3ac171bc2b7e06d96"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/brianium/habitat/zipball/d0979e3bb379cbc78ecb42b3ac171bc2b7e06d96",
+                "reference": "d0979e3bb379cbc78ecb42b3ac171bc2b7e06d96",
+                "shasum": ""
+            },
+            "require-dev": {
+                "monolog/monolog": ">=1.5.0",
+                "phpunit/phpunit": ">=3.7.21"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Habitat": [
+                        "src/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brian Scaturro",
+                    "email": "scaturrob@gmail.com",
+                    "homepage": "http://brianscaturro.com",
+                    "role": "lead"
+                }
+            ],
+            "description": "A dependable php environment",
+            "time": "2013-06-08 04:42:29"
+        },
+        {
+            "name": "cebe/markdown",
+            "version": "0.9.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cebe/markdown.git",
+                "reference": "70d24fe88e3cb2795d2a422f3dffd264861bca20"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cebe/markdown/zipball/70d24fe88e3cb2795d2a422f3dffd264861bca20",
+                "reference": "70d24fe88e3cb2795d2a422f3dffd264861bca20",
+                "shasum": ""
+            },
+            "require": {
+                "lib-pcre": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "bin": [
+                "bin/markdown"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "cebe\\markdown\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Carsten Brandt",
+                    "email": "mail@cebe.cc",
+                    "homepage": "http://cebe.cc/",
+                    "role": "Creator"
+                }
+            ],
+            "description": "A super fast highly extensible markdown parser for PHP",
+            "homepage": "http://www.cebe.cc/markdown",
+            "keywords": [
+                "extensible",
+                "fast",
+                "gfm",
+                "markdown",
+                "markdown-extra"
+            ],
+            "time": "2014-02-18 15:53:17"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.1.2",
@@ -629,6 +802,109 @@
             "time": "2014-06-10 11:49:08"
         },
         {
+            "name": "font-awesome/font-awesome",
+            "version": "4.1.0",
+            "dist": {
+                "type": "zip",
+                "url": "http://fortawesome.github.io/Font-Awesome/assets/font-awesome-4.1.0.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
+            "name": "guzzle/guzzle",
+            "version": "v3.9.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/guzzle3.git",
+                "reference": "92d9934f2fca1da15178c91239576ae26e505e60"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/guzzle3/zipball/92d9934f2fca1da15178c91239576ae26e505e60",
+                "reference": "92d9934f2fca1da15178c91239576ae26e505e60",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.3",
+                "symfony/event-dispatcher": "~2.1"
+            },
+            "replace": {
+                "guzzle/batch": "self.version",
+                "guzzle/cache": "self.version",
+                "guzzle/common": "self.version",
+                "guzzle/http": "self.version",
+                "guzzle/inflection": "self.version",
+                "guzzle/iterator": "self.version",
+                "guzzle/log": "self.version",
+                "guzzle/parser": "self.version",
+                "guzzle/plugin": "self.version",
+                "guzzle/plugin-async": "self.version",
+                "guzzle/plugin-backoff": "self.version",
+                "guzzle/plugin-cache": "self.version",
+                "guzzle/plugin-cookie": "self.version",
+                "guzzle/plugin-curlauth": "self.version",
+                "guzzle/plugin-error-response": "self.version",
+                "guzzle/plugin-history": "self.version",
+                "guzzle/plugin-log": "self.version",
+                "guzzle/plugin-md5": "self.version",
+                "guzzle/plugin-mock": "self.version",
+                "guzzle/plugin-oauth": "self.version",
+                "guzzle/service": "self.version",
+                "guzzle/stream": "self.version"
+            },
+            "require-dev": {
+                "doctrine/cache": "~1.3",
+                "monolog/monolog": "~1.0",
+                "phpunit/phpunit": "3.7.*",
+                "psr/log": "~1.0",
+                "symfony/class-loader": "~2.1",
+                "zendframework/zend-cache": "2.*,<2.3",
+                "zendframework/zend-log": "2.*,<2.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Guzzle": "src/",
+                    "Guzzle\\Tests": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                },
+                {
+                    "name": "Guzzle Community",
+                    "homepage": "https://github.com/guzzle/guzzle/contributors"
+                }
+            ],
+            "description": "Guzzle is a PHP HTTP client library and framework for building RESTful web service clients",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "client",
+                "curl",
+                "framework",
+                "http",
+                "http client",
+                "rest",
+                "web service"
+            ],
+            "time": "2014-05-07 17:04:22"
+        },
+        {
             "name": "incenteev/composer-parameter-handler",
             "version": "v2.1.0",
             "target-dir": "Incenteev/ParameterHandler",
@@ -731,6 +1007,17 @@
             "time": "2014-01-12 16:20:24"
         },
         {
+            "name": "jquery/jquery",
+            "version": "2.1.0",
+            "dist": {
+                "type": "file",
+                "url": "http://code.jquery.com/jquery-2.1.0.min.js",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
             "name": "kriswallsmith/assetic",
             "version": "v1.1.2",
             "source": {
@@ -802,6 +1089,58 @@
             "time": "2013-07-19 00:03:27"
         },
         {
+            "name": "leafo/lessphp",
+            "version": "v0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/leafo/lessphp.git",
+                "reference": "51f3f06f0fe78a722dabfd14578444bdd078d9de"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/leafo/lessphp/zipball/51f3f06f0fe78a722dabfd14578444bdd078d9de",
+                "reference": "51f3f06f0fe78a722dabfd14578444bdd078d9de",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "lessc.inc.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Leaf Corcoran",
+                    "email": "leafot@gmail.com",
+                    "homepage": "http://leafo.net"
+                }
+            ],
+            "description": "lessphp is a compiler for LESS written in PHP.",
+            "homepage": "http://leafo.net/lessphp/",
+            "time": "2013-08-09 17:09:19"
+        },
+        {
+            "name": "modernizr/modernizr",
+            "version": "2.7.1",
+            "dist": {
+                "type": "file",
+                "url": "http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
             "name": "monolog/monolog",
             "version": "1.10.0",
             "source": {
@@ -870,6 +1209,145 @@
             "time": "2014-06-04 16:30:04"
         },
         {
+            "name": "netgusto/devserver-bundle",
+            "version": "dev-master",
+            "target-dir": "Netgusto/DevServerBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/netgusto/Symfony-DevServerBundle.git",
+                "reference": "0ba46b1e63a7c0014b1d32cf5c381a9c00da832f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/netgusto/Symfony-DevServerBundle/zipball/0ba46b1e63a7c0014b1d32cf5c381a9c00da832f",
+                "reference": "0ba46b1e63a7c0014b1d32cf5c381a9c00da832f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/framework-bundle": "~2.4"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Netgusto\\DevServerBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Net Gusto",
+                    "email": "contact@netgusto.com"
+                }
+            ],
+            "description": "Development server console command with subdomain support, and automatic assets compilation.",
+            "homepage": "https://github.com/netgusto/Symfony-DevServerBundle",
+            "keywords": [
+                "assets",
+                "development",
+                "server",
+                "subdomain",
+                "symfony"
+            ],
+            "time": "2014-06-01 09:22:25"
+        },
+        {
+            "name": "netgusto/pulpy-theme-casper",
+            "version": "1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/netgusto/Pulpy-Theme-Casper.git",
+                "reference": "3afcc2e9055d91e6f6b19f777e86bda6da402a39"
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "package",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Net Gusto",
+                    "email": "contact@netgusto.com"
+                }
+            ],
+            "description": "The Casper Theme from Ghost, adapted to Pulpy",
+            "homepage": "https://github.com/netgusto/pulpy-theme-casper",
+            "keywords": [
+                "casper",
+                "ghost",
+                "pulpy",
+                "silex",
+                "theme"
+            ],
+            "time": "2014-06-25 12:02:08"
+        },
+        {
+            "name": "netgusto/pulpy-theme-dropplets",
+            "version": "1.0.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/netgusto/Pulpy-Theme-Dropplets.git",
+                "reference": "06432f35cb00329426f15d0322f5b1a9c78490f3"
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "package",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Net Gusto",
+                    "email": "contact@netgusto.com"
+                }
+            ],
+            "description": "Dropplets theme for Pulpy",
+            "homepage": "https://github.com/netgusto/pulpy-theme-dropplets",
+            "keywords": [
+                "pulpy",
+                "silex",
+                "theme"
+            ],
+            "time": "2014-06-25 12:00:00"
+        },
+        {
+            "name": "netgusto/pulpy-theme-medium",
+            "version": "1.0.17",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/netgusto/Pulpy-Theme-Medium.git",
+                "reference": "b85d6522ecf5834e603620218bab0e693adfcb64"
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "package",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Net Gusto",
+                    "email": "contact@netgusto.com"
+                }
+            ],
+            "description": "Medium theme for Pulpy",
+            "homepage": "https://github.com/netgusto/pulpy-theme-medium",
+            "keywords": [
+                "medium",
+                "pulpy",
+                "silex",
+                "theme"
+            ],
+            "time": "2014-06-25 12:01:03"
+        },
+        {
             "name": "psr/log",
             "version": "1.0.0",
             "source": {
@@ -906,6 +1384,17 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "requirejs/requirejs",
+            "version": "2.1.11",
+            "dist": {
+                "type": "file",
+                "url": "http://requirejs.org/docs/release/2.1.11/minified/require.js",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -1022,6 +1511,51 @@
                 "controllers"
             ],
             "time": "2014-05-22 23:27:44"
+        },
+        {
+            "name": "suin/php-rss-writer",
+            "version": "1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/suin/php-rss-writer.git",
+                "reference": "82812ff988bb470f746d24e153cdc138e8838ff3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/suin/php-rss-writer/zipball/82812ff988bb470f746d24e153cdc138e8838ff3",
+                "reference": "82812ff988bb470f746d24e153cdc138e8838ff3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Suin\\RSSWriter": "Source"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hidehito Nozawa aka Suin",
+                    "email": "suinyeze@gmail.com",
+                    "homepage": "https://www.facebook.com/suinyeze",
+                    "role": "Developer, Renaming Specialist"
+                }
+            ],
+            "description": "Yet another simple RSS writer library for PHP 5.3 or later.",
+            "homepage": "https://github.com/suin/php-rss-writer",
+            "keywords": [
+                "feed",
+                "generator",
+                "rss",
+                "writer"
+            ],
+            "time": "2014-03-12 06:05:28"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1424,6 +1958,57 @@
             "time": "2014-05-31 18:45:50"
         },
         {
+            "name": "twbs/bootstrap",
+            "version": "v3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twbs/bootstrap.git",
+                "reference": "c068162161154a4b85110ea1e7dd3d7897ce2b72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/c068162161154a4b85110ea1e7dd3d7897ce2b72",
+                "reference": "c068162161154a4b85110ea1e7dd3d7897ce2b72",
+                "shasum": ""
+            },
+            "replace": {
+                "twitter/bootstrap": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jacob Thornton",
+                    "email": "jacobthornton@gmail.com"
+                },
+                {
+                    "name": "Mark Otto",
+                    "email": "markdotto@gmail.com"
+                }
+            ],
+            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+            "homepage": "http://getbootstrap.com",
+            "keywords": [
+                "JS",
+                "css",
+                "framework",
+                "front-end",
+                "less",
+                "mobile-first",
+                "responsive",
+                "web"
+            ],
+            "time": "2014-06-26 16:36:48"
+        },
+        {
             "name": "twig/extensions",
             "version": "v1.0.1",
             "source": {
@@ -1528,6 +2113,28 @@
                 "templating"
             ],
             "time": "2014-02-13 10:19:29"
+        },
+        {
+            "name": "underscorejs/underscorejs",
+            "version": "1.6.0",
+            "dist": {
+                "type": "file",
+                "url": "http://underscorejs.org/underscore-min.js",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
+            "name": "zipball/highlightjs",
+            "version": "8.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/components/highlightjs/archive/8.0.0.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
         }
     ],
     "packages-dev": [
@@ -1584,7 +2191,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "netgusto/devserver-bundle": 20
+    },
     "platform": {
         "php": ">=5.3.3"
     },

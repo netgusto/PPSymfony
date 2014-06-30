@@ -1,0 +1,3 @@
+_frontend:
+    resource: "@PulpyCoreBundle/Resources/config/routing.yml"
+    prefix:   /

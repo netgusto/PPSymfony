@@ -1,0 +1,197 @@
+services:
+
+    scalar.interpreter:
+        class: Pulpy\CoreBundle\Services\ScalarInterpreterService
+
+    environment.resolver:
+        class: Pulpy\CoreBundle\Services\Context\EnvironmentResolverService
+        arguments:
+            - %rootdir%/.env
+
+    environment:
+        class: Pulpy\CoreBundle\Services\Context\EnvironmentService
+        arguments:
+            - @=service('environment.resolver').getResolvedEnv()
+            - @scalar.interpreter
+            - %rootdir%
+
+    ### PLATFORM: Classic
+    system.status:
+        class: Pulpy\CoreBundle\Services\Context\EnvironmentService
+
+    config.loader.filebacked:
+        class: Pulpy\CoreBundle\Services\Config\Loader\FileBackedConfigLoaderService
+        arguments:
+            - { data.dir: data }
+
+    config.site:
+        class: Pulpy\CoreBundle\Services\Config\SiteConfigService
+        arguments:
+            - @=service('config.loader.filebacked').load(parameter('rootdir') ~ '/config/app.yml')
+
+    fs.persistent:
+        class: Pulpy\CoreBundle\Services\PersistentStorage\LocalFSPersistentStorageService
+        arguments:
+            - @=service('environment').getRootDir()
+            - @=service('environment').getSiteUrl()
+
+    resource.resolver:
+        class: Pulpy\CoreBundle\Services\ResourceResolverService
+        arguments:
+            - @fs.persistent
+            - @=service('config.site').getResourcesDir()
+
+    post.resource.resolver:
+        class: Pulpy\CoreBundle\Services\Post\PostResourceResolverService
+        arguments:
+            - @fs.persistent
+            - @=service('config.site').getResourcesDir()
+
+    postfile.resolver:
+        class: Pulpy\CoreBundle\Services\PostFile\PostFileResolverService
+        arguments:
+            - @=service('config.site').getPostsDir()
+            - @=service('config.site').getPostsExtension()
+
+    post.cachehandler:
+        class: Pulpy\CoreBundle\Services\CacheHandler\LastModifiedPostCacheHandlerService
+        arguments:
+            - @fs.persistent
+            - @system.status
+            - @postfile.repository
+            - @post.repository
+            - @postfile.topostconverter
+            - @doctrine.orm.entity_manager
+            - @=service('config.site').getPostsDir()
+            - @culture
+
+    ### /PLATFORM: Classic
+
+    url.absolutizer:
+        class: Pulpy\CoreBundle\Services\URLAbsolutizerService
+        arguments:
+            - @=service('environment').getSiteurl()
+            - @=service('environment').getWebdir()
+
+    culture:
+        class: Pulpy\CoreBundle\Services\Context\CultureService
+        arguments:
+            - @=service('config.site').getCulturelocale()
+            - @=service('config.site').getCulturedateformat()
+            - @=service('config.site').getCulturedatetimezone()
+
+    twig.pulpyextension:
+        class: Pulpy\CoreBundle\Twig\PulpyExtension
+        arguments:
+            - @post.repository
+            - @post.serializer
+            - @router
+            - @post.urlgenerator
+            - @markdown.processor
+            - @resource.resolver
+            - @post.resource.resolver
+            - @url.absolutizer
+            - @=service('environment').getDomain()
+            - @culture
+            - @config.site
+        tags:
+            - { name: twig.extension }
+
+    postfile.repository:
+        class: Pulpy\CoreBundle\Services\PostFile\PostFileRepositoryService
+        arguments:
+            - @fs.persistent
+            - @postfile.resolver
+            - @postfile.reader
+            - @=service('config.site').getPostsdir()
+            - @=service('config.site').getPostsExtension()
+
+    post.repository:
+        class: Pulpy\CoreBundle\Services\Post\PostRepository
+        arguments:
+            - @doctrine.orm.entity_manager
+
+    markdown.processor:
+        class: Pulpy\CoreBundle\Services\TextProcessor\Markdown\CebeMarkdownProcessorService
+
+    post.fingerprinter:
+        class: Pulpy\CoreBundle\Services\Post\PostFingerprinterService
+
+    postfile.topostconverter:
+        class: Pulpy\CoreBundle\Services\PostFile\PostFileToPostConverterService
+
+    post.urlgenerator:
+        class: Pulpy\CoreBundle\Services\Post\PostURLGeneratorService
+        arguments:
+            - @post.repository
+            - @router
+            - @url.absolutizer
+
+    postfile.reader:
+        class: Pulpy\CoreBundle\Services\PostFile\PostFileReaderService
+        arguments:
+            - @fs.persistent
+            - @postfile.resolver
+            - @post.resource.resolver
+            - @post.fingerprinter
+            - @culture
+            - @config.site
+
+    post.serializer:
+        class: Pulpy\CoreBundle\Services\Post\PostSerializerService
+        arguments:
+            - @post.repository
+            - @markdown.processor
+            - @post.urlgenerator
+            - @url.absolutizer
+            - @post.resource.resolver
+            - @culture
+
+    ### Controllers
+
+    home.controller:
+        class: Pulpy\CoreBundle\Controller\HomeController
+        arguments:
+            - @twig
+            - @post.repository
+            - @postfile.resolver
+            - @culture
+            - @config.site
+            - @router
+            - @=service('config.site').getHomepostsperpage()
+
+    post.controller:
+        class: Pulpy\CoreBundle\Controller\PostController
+        arguments:
+            - @twig
+            - @post.repository
+            - @postfile.resolver
+
+    feed.controller:
+        class: Pulpy\CoreBundle\Controller\FeedController
+        arguments:
+            - @post.repository
+            - @post.serializer
+            - @post.resource.resolver
+            - @url.absolutizer
+            - @config.site
+
+    json.controller:
+        class: Pulpy\CoreBundle\Controller\JsonController
+        arguments:
+            - @post.repository
+            - @post.serializer
+
+    error.controller:
+        class: Pulpy\CoreBundle\Controller\ErrorController
+        arguments:
+            - @twig
+
+    initialization.controller:
+        class: Pulpy\CoreBundle\Controller\InitializationController
+        arguments:
+            - @twig
+            - @environment
+            - @router
+            - @form.factory
+            - @doctrine.orm.entity_manager
