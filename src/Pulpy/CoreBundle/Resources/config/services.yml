@@ -1,6 +1,3 @@
-#imports:
-#    - { resource: platform.paas.services.yml }
-
 services:
 
     twig.extension.text:
