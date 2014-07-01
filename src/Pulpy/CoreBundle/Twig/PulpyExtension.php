@@ -2,69 +2,67 @@
 
 namespace Pulpy\CoreBundle\Twig;
 
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Bundle\FrameworkBundle\Routing\Router,
+    Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Pulpy\CoreBundle\Services\ResourceResolverService,
+use
+#   Pulpy\CoreBundle\Services\ResourceResolverService,
     Pulpy\CoreBundle\Services\URLAbsolutizerService,
     Pulpy\CoreBundle\Services\TextProcessor\Markdown\MarkdownProcessorInterface,
-    Pulpy\CoreBundle\Services\Post\PostResourceResolverService,
+#   Pulpy\CoreBundle\Services\Post\PostResourceResolverService,
     Pulpy\CoreBundle\Services\Post\PostURLGeneratorService,
-    Pulpy\CoreBundle\Services\Post\PostSerializerService,
-    Pulpy\CoreBundle\Services\Context\CultureService,
-    Pulpy\CoreBundle\Services\Config\SiteConfigService,
+#   Pulpy\CoreBundle\Services\Post\PostSerializerService,
+#    Pulpy\CoreBundle\Services\Context\CultureService,
+#   Pulpy\CoreBundle\Services\Config\SiteConfigService,
     Pulpy\CoreBundle\Services\Post\PostRepository,
     Pulpy\CoreBundle\Entity\Post,
     Pulpy\CoreBundle\Entity\AppUser;
 
 class PulpyExtension extends \Twig_Extension {
 
+    protected $container;
     protected $postRepo;
-    protected $postserializer;
     protected $urlgenerator;
     protected $posturlgenerator;
     protected $markdownProcessor;
-    protected $resourceresolver;
-    protected $postresourceresolver;
     protected $urlabsolutizer;
     protected $domainname;
-    protected $culture;
-    protected $siteconfig;
 
     public function __construct(
+        ContainerInterface $container,
         PostRepository $postRepo,
-        PostSerializerService $postserializer,
         Router $urlgenerator,
         PostURLGeneratorService $posturlgenerator,
         MarkdownProcessorInterface $markdownProcessor,
-        ResourceResolverService $resourceresolver,
-        PostResourceResolverService $postresourceresolver,
         URLAbsolutizerService $urlabsolutizer,
-        $domainname,
-        CultureService $culture,
-        SiteConfigService $siteconfig
+        $domainname
+        
+        # LAZY LOADED SERVICES (through $container)
+        #PostSerializerService $postserializer,
+        #ResourceResolverService $resourceresolver,
+        #PostResourceResolverService $postresourceresolver,
+        #CultureService $culture,
+        #SiteConfigService $siteconfig
     ) {
+        $this->container = $container;
         $this->postRepo = $postRepo;
-        $this->postserializer = $postserializer;
         $this->urlgenerator = $urlgenerator;
         $this->posturlgenerator = $posturlgenerator;
         $this->markdownProcessor = $markdownProcessor;
-        $this->resourceresolver = $resourceresolver;
-        $this->postresourceresolver = $postresourceresolver;
         $this->urlabsolutizer = $urlabsolutizer;
         $this->domainname = $domainname;
-        $this->culture = $culture;
-        $this->siteconfig = $siteconfig;
     }
     
     public function getName() {
         return 'pulpy';
     }
 
-    public function getGlobals() {
-        return array(
-            'site' => $this->siteconfig,
-        );
-    }
+    # Abandoned because it breaks the lazy loading of @config.site
+    #public function getGlobals() {
+    #    return array(
+    #        'site' => $this->container->get('config.site'),
+    #    );
+    #}
 
     public function getFilters() {
         return array(
@@ -88,11 +86,16 @@ class PulpyExtension extends \Twig_Extension {
             'nextpost' => new \Twig_SimpleFunction('nextpost', array($this, 'nextpost')),
             'previouspost' => new \Twig_SimpleFunction('previouspost', array($this, 'previouspost')),
             'avatarurl' => new \Twig_SimpleFunction('avatarurl', array($this, 'avatarurl')),
+            'siteconfig' => new \Twig_SimpleFunction('siteconfig', array($this, 'siteconfig')),
         );
     }
 
+    public function siteconfig() {
+        return $this->container->get('config.site');
+    }
+
     public function serializepost(Post $post) {
-        return $this->postserializer->serialize($post);
+        return $this->container->get('post.serializer')->serialize($post);
     }
 
     public function previouspost(Post $post) {
@@ -112,14 +115,14 @@ class PulpyExtension extends \Twig_Extension {
     }
 
     public function topostresourceurl($relfilepath, Post $post) {
-        return $this->postresourceresolver->urlForPostAndResourceName(
+        return $this->container->get('post.resource.resolver')->urlForPostAndResourceName(
             $post,
             $relfilepath
         );
     }
 
     public function toresourceurl($relfilepath) {
-        return $this->resourceresolver->urlForResourceName(
+        return $this->container->get('resource.resolver')->urlForResourceName(
             $relfilepath
         );
     }
@@ -137,7 +140,7 @@ class PulpyExtension extends \Twig_Extension {
     }
 
     public function humandate(\DateTime $date) {
-        return $this->culture->humanDate($date);
+        return $this->container->get('culture')->humanDate($date);
     }
 
     public function md5($string) {
@@ -154,7 +157,7 @@ class PulpyExtension extends \Twig_Extension {
             return '';
         }
 
-        $shortname = trim($this->siteconfig->getComponentsDisqusShortname());
+        $shortname = trim($this->container->get('config.site')->getComponentsDisqusShortname());
         if($shortname === '') {
             return '';
         }
@@ -184,8 +187,8 @@ HTML;
 
     public function component_googleanalytics() {
 
-        $ga_uacode = trim($this->siteconfig->getComponentsGoogleanalyticsUacode());
-        $ga_domainname = $this->siteconfig->getComponentsGoogleanalyticsDomain();
+        $ga_uacode = trim($this->container->get('config.site')->getComponentsGoogleanalyticsUacode());
+        $ga_domainname = $this->container->get('config.site')->getComponentsGoogleanalyticsDomain();
         
         if($ga_uacode === '') {
             return '';
@@ -245,9 +248,9 @@ SCRIPT;
     protected function metatagsWithoutPost() {
         $metas = array();
 
-        $sitedescription = $this->cleanupMetaString($this->siteconfig->getDescription());
-        $author = $this->cleanupMetaString($this->siteconfig->getOwnername());
-        $ownertwitter = $this->cleanupMetaString($this->siteconfig->getOwnertwitter());
+        $sitedescription = $this->cleanupMetaString($this->container->get('config.site')->getDescription());
+        $author = $this->cleanupMetaString($this->container->get('config.site')->getOwnername());
+        $ownertwitter = $this->cleanupMetaString($this->container->get('config.site')->getOwnertwitter());
 
         $metas['title'] = '<title>' . htmlspecialchars($this->documenttitleforposttitle('')) . '</title>';
         $metas['author'] = '<meta name="author" content="' . htmlspecialchars($author) . '">';
@@ -261,7 +264,7 @@ SCRIPT;
     }
 
     public function documenttitleforposttitle(/*string*/ $posttitle = '') {
-        $sitetitle = $this->cleanupMetaString($this->siteconfig->getTitle());
+        $sitetitle = $this->cleanupMetaString($this->container->get('config.site')->getTitle());
         $posttitle = $this->cleanupMetaString($posttitle);
 
         if(trim($posttitle) === '') {
@@ -279,12 +282,12 @@ SCRIPT;
 
         $metas = $this->metatagsWithoutPost();
 
-        $sitetitle = $this->cleanupMetaString($this->siteconfig->getTitle());
-        $sitedescription = $this->cleanupMetaString($this->siteconfig->getDescription());
+        $sitetitle = $this->cleanupMetaString($this->container->get('config.site')->getTitle());
+        $sitedescription = $this->cleanupMetaString($this->container->get('config.site')->getDescription());
         $posttitle = $this->cleanupMetaString($post->getTitle());
         $intro = $this->cleanupMetaString($this->markdown($post->getIntro()));
-        $author = $this->cleanupMetaString($this->siteconfig->getOwnername());
-        $ownertwitter = $this->cleanupMetaString($this->siteconfig->getOwnertwitter());
+        $author = $this->cleanupMetaString($this->container->get('config.site')->getOwnername());
+        $ownertwitter = $this->cleanupMetaString($this->container->get('config.site')->getOwnertwitter());
         
         $imagerelpath = $post->getImage();
         if($imagerelpath) {

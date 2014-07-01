@@ -1,9 +1,59 @@
 services:
 
+    # tagged services - need to be injected with container to allow lazy-loading for dependencies
+    # useful for avoiding db-based dependencies problems (like site.config) when initializing the application
+
+    watch.systemhealth:
+        class: Pulpy\CoreBundle\EventListener\SystemHealthCheckerListener
+        arguments:
+            # Event listener are not lazyloaded, so need to inject service container to lazyload initialization.controller
+            - @service_container
+            - @environment
+            #- @system.status
+            - @database_connection
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    watch.exception:
+        class: Pulpy\CoreBundle\EventListener\InitializationExceptionListener
+        scope: request
+        arguments:
+            # Event listener are not lazyloaded, so need to inject service container to lazyload initialization.controller
+            - @service_container
+            - @database_connection
+            - @environment
+            - @request
+            # LAZYLOADED # - @initialization.controller
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
     twig.extension.text:
         class: Twig_Extensions_Extension_Text
         tags:
             - { name: twig.extension }
+
+    twig.pulpyextension:
+        class: Pulpy\CoreBundle\Twig\PulpyExtension
+        arguments:
+            # Inject service container to lazyload dependencies
+            - @service_container
+            - @post.repository
+            - @router
+            - @post.urlgenerator
+            - @markdown.processor
+            - @url.absolutizer
+            - @=service('environment').getDomain()
+            # LAZYLOADED # - @post.serializer
+            # LAZYLOADED # - @resource.resolver
+            # LAZYLOADED # - @post.resource.resolver
+            # LAZYLOADED # - @culture
+            # LAZYLOADED # - @config.site
+        tags:
+            - { name: twig.extension }
+
+    ###########################################################################
+    # Pulpy services
+    ###########################################################################
 
     scalar.interpreter:
         class: Pulpy\CoreBundle\Services\ScalarInterpreterService
@@ -11,12 +61,12 @@ services:
     environment.resolver:
         class: Pulpy\CoreBundle\Services\Context\EnvironmentResolverService
         arguments:
-            - %rootdir%/.env
+            - %environment%
 
     environment:
         class: Pulpy\CoreBundle\Services\Context\EnvironmentService
         arguments:
-            - @=service('environment.resolver').getResolvedEnv()
+            - %resolved_env%
             - @scalar.interpreter
             - %rootdir%
 
@@ -24,6 +74,17 @@ services:
         class: Pulpy\CoreBundle\Services\Context\SystemStatusService
         arguments:
             - @doctrine.orm.entity_manager
+
+    config.loader.dbbacked:
+        class: Pulpy\CoreBundle\Services\Config\Loader\DbBackedConfigLoaderService
+        arguments:
+            - @doctrine.orm.entity_manager
+            - { data.dir: '' }
+
+    config.site:
+        class: Pulpy\CoreBundle\Services\Config\SiteConfigService
+        arguments:
+            - @=service('config.loader.dbbacked').load('config.site')
 
     url.absolutizer:
         class: Pulpy\CoreBundle\Services\URLAbsolutizerService
@@ -37,23 +98,6 @@ services:
             - @=service('config.site').getCulturelocale()
             - @=service('config.site').getCulturedateformat()
             - @=service('config.site').getCulturedatetimezone()
-
-    twig.pulpyextension:
-        class: Pulpy\CoreBundle\Twig\PulpyExtension
-        arguments:
-            - @post.repository
-            - @post.serializer
-            - @router
-            - @post.urlgenerator
-            - @markdown.processor
-            - @resource.resolver
-            - @post.resource.resolver
-            - @url.absolutizer
-            - @=service('environment').getDomain()
-            - @culture
-            - @config.site
-        tags:
-            - { name: twig.extension }
 
     postfile.repository:
         class: Pulpy\CoreBundle\Services\PostFile\PostFileRepositoryService
@@ -165,7 +209,10 @@ services:
 
     initialization.controller:
         class: Pulpy\CoreBundle\Controller\InitializationController
+        lazy: true
         arguments:
+            # To disable the profiler bar if defined
+            - @service_container
             - @twig
             - @environment
             - @router
@@ -173,3 +220,4 @@ services:
             - @doctrine.orm.entity_manager
             - %appversion%
             - @security.encoder_factory
+            - @system.status

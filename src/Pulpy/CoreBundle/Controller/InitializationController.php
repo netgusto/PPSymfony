@@ -2,15 +2,18 @@
 
 namespace Pulpy\CoreBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request,
+use Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response,
     Symfony\Component\HttpFoundation\RedirectResponse,
-    Symfony\Component\Routing\Generator\UrlGenerator,
+    Symfony\Component\Routing\Router,
     Symfony\Component\Form\FormFactory,
     Symfony\Component\Yaml\Yaml,
+    Symfony\Component\Security\Core\Encoder\EncoderFactory,
     Twig_Environment;
 
-use \Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManager,
+    Doctrine\DBAL\Connection;
 
 use Pulpy\CoreBundle\Exception as PulpyException,
     Pulpy\CoreBundle\Services as PulpyServices,
@@ -21,6 +24,7 @@ use Pulpy\CoreBundle\Exception as PulpyException,
 
 class InitializationController {
 
+    protected $container;
     protected $twig;
     protected $environment;
     protected $urlgenerator;
@@ -28,15 +32,28 @@ class InitializationController {
     protected $em;
     protected $appversion;
     protected $passwordencoder_factory;
+    protected $systemstatus;
+
+    const DIAG_DBNOCONNECTION = 'DIAG_DBNOCONNECTION';
+    const DIAG_DBMISSING = 'DIAG_DBMISSING';
+    const DIAG_DBEMPTY = 'DIAG_DBEMPTY';
+    const DIAG_APPNOTINITIALIZED = 'DIAG_APPNOTINITIALIZED';
+    const DIAG_SYSTEMSTATUSMISSING = 'DIAG_SYSTEMSTATUSMISSING';
+    const DIAG_CONFIGUREDVERSIONTOOHIGH = 'DIAG_CONFIGUREDVERSIONTOOHIGH';
+    const DIAG_CONFIGUREDVERSIONTOOLOW = 'DIAG_CONFIGUREDVERSIONTOOLOW';
+    const DIAG_OK = 'DIAG_OK';
+
 
     public function __construct(
+        ContainerInterface $container,
         Twig_Environment $twig,
         PulpyServices\Context\EnvironmentService $environment,
-        UrlGenerator $urlgenerator,
+        Router $urlgenerator,
         FormFactory $formfactory,
         EntityManager $em,
         $appversion,
-        ddd $passwordencoder_factory
+        EncoderFactory $passwordencoder_factory,
+        PulpyServices\Context\SystemStatusService $systemstatus
     ) {
         $this->twig = $twig;
         $this->environment = $environment;
@@ -45,40 +62,52 @@ class InitializationController {
         $this->em = $em;
         $this->appversion = $appversion;
         $this->passwordencoder_factory = $passwordencoder_factory;
+        $this->systemstatus = $systemstatus;
+
+        $this->appdiag = $this->appDiagnostic();
+
+        # Disable the profiler
+        if($container->has('profiler')) {
+            $container->get('profiler')->disable();
+        }
     }
 
     public function reactToExceptionAction(
         Request $request,
         PulpyException\InitializationNeeded\InitializationNeededExceptionInterface $e
     ) {
+        
+        if(($response = $this->ensureInitializationModeOn()) !== TRUE) {
+            return $response;
+        }
 
-        if($this->environment->getInitializationMode() !== TRUE) {
-            return new Response('Initialization mode off. Access denied.', 401);
+        if(strpos($request->attributes->get('_route'), '_init_') === 0) {
+            
+            # initialization in progress; just proceed with the requested controller
+            return $this->proceedWithInitializationRequestAction(
+                $request,
+                $e
+            );
         }
 
         switch(TRUE) {
-            case $e instanceOf PulpyException\InitializationNeeded\DatabaseMissingInitializationNeededException: {
-                $action = 'databaseMissingAction';
-                break;
-            }
+
+            case $e instanceOf PulpyException\InitializationNeeded\InstallModeActivatedInitializationNeededException:
+            case $e instanceOf PulpyException\InitializationNeeded\DatabaseMissingInitializationNeededException:
             case $e instanceOf PulpyException\InitializationNeeded\DatabaseEmptyInitializationNeededException: {
-                $action = 'databaseEmptyAction';
+                $nextroute = '_init_welcome';
                 break;
             }
             case $e instanceOf PulpyException\InitializationNeeded\SystemStatusMarkedAsUninitializedInitializationNeededException: {
-                $action = 'systemStatusMarkedAsUninitializedAction';
+                $nextroute = '_init_step2';
                 break;
             }
             default: {
-                $action = 'unknownInitializationTaskAction';
-                break;
+                die('unknownInitializationTaskAction');
             }
         }
 
-        return $this->$action(
-            $request,
-            $e
-        );
+        return new RedirectResponse($this->urlgenerator->generate($nextroute));
     }
 
     public function proceedWithInitializationRequestAction(
@@ -86,19 +115,12 @@ class InitializationController {
         PulpyException\InitializationNeeded\InitializationNeededExceptionInterface $e
     ) {
 
-        if($this->environment->getInitializationMode() !== TRUE) {
-            return new Response('Initialization mode off. Access denied.', 401);
+        if(($response = $this->ensureInitializationModeOn()) !== TRUE) {
+            return $response;
         }
 
         if($request->attributes->get('_route') === '_init_welcome') {
-
-            $createdb = ($e instanceOf PulpyException\InitializationNeeded\DatabaseMissingInitializationNeededException);
-            $createschema = $createdb || ($e instanceOf PulpyException\InitializationNeeded\DatabaseEmptyInitializationNeededException);
-
-            return $this->welcomeAction($request, array(
-                'createdb' => $createdb,
-                'createschema' => $createschema,
-            ));
+            return $this->welcomeAction($request);
         }
 
         if($request->attributes->get('_route') === '_init_step1_createdb') {
@@ -116,38 +138,97 @@ class InitializationController {
         if($request->attributes->get('_route') === '_init_finish') {
             return $this->finishAction($request);
         }
-    }
 
-
-    public function databaseMissingAction(Request $request, PulpyException\InitializationNeeded\DatabaseMissingInitializationNeededException $e) {
-        return new RedirectResponse($this->urlgenerator->generate('_init_welcome'));
-    }
-
-    public function databaseEmptyAction(Request $request, PulpyException\InitializationNeeded\DatabaseEmptyInitializationNeededException $e) {
-        return new RedirectResponse($this->urlgenerator->generate('_init_welcome'));
+        if($request->attributes->get('_route') === '_init_dbnoconnection') {
+            return new Response('<h2>No DB connection !</h2>');
+        }
     }
 
     public function systemStatusMarkedAsUninitializedAction(Request $request, PulpyException\InitializationNeeded\SystemStatusMarkedAsUninitializedInitializationNeededException $e) {
         # System status exists, but marked as unitialized
         # It means that the initialization process has not passed step 2 yet
+
+        if(($response = $this->ensureInitializationModeOn()) !== TRUE) {
+            return $response;
+        }
         
         return new RedirectResponse($this->urlgenerator->generate('_init_step2'));
     }
 
-    public function welcomeAction(Request $request, $tasks = array()) {
+    protected function appDiagnostic() {
 
-        if($this->environment->getInitializationMode() !== TRUE) {
-            return new Response('Initialization mode off. Access denied.', 401);
+        $connection = $this->em->getConnection();
+
+        # We check if the database exists
+        try {
+            $tables = $connection->getSchemaManager()->listTableNames();
+        } catch(\PDOException $pdoexception) {
+            if(strpos($pdoexception->getMessage(), 'Access denied') !== FALSE) {
+                return self::DIAG_DBNOCONNECTION;
+            } else {
+                return self::DIAG_DBMISSING;
+            }
         }
 
-        if($tasks['createdb']) {
-            $nextroute = '_init_step1_createdb';
-        } elseif($tasks['createschema']) {
-            $nextroute = '_init_step1_createschema';
-        } else {
-            # Database is OK; proceed to next step
-            # Should never be the case here
-            $nextroute = '_init_step2';
+        if(empty($tables)) {
+            return self::DIAG_DBEMPTY;
+        }
+
+        try {
+            
+            # SystemStatusMissingMaintenanceNeededException
+            if($this->systemstatus->getInitialized() !== TRUE) {
+                return self::DIAG_APPNOTINITIALIZED;
+            }
+        } catch(PulpyException\MaintenanceNeeded\SystemStatusMissingMaintenanceNeededException $e) {
+            return self::DIAG_SYSTEMSTATUSMISSING;
+        }
+
+        $versiondiff = version_compare($this->systemstatus->getConfiguredversion(), $this->appversion);
+        if($versiondiff > 0) {
+            return self::DIAG_CONFIGUREDVERSIONTOOHIGH;
+        } elseif ($versiondiff < 0) {
+            return self::DIAG_CONFIGUREDVERSIONTOOLOW;
+        }
+
+        return self::DIAG_OK;
+    }
+
+    public function welcomeAction(Request $request) {
+
+        if(($response = $this->ensureInitializationModeOn()) !== TRUE) {
+            return $response;
+        }
+
+        if($this->appdiag === self::DIAG_OK) {
+            return new RedirectResponse($this->urlgenerator->generate('_init_finish'));
+        }
+
+        switch($this->appdiag) {
+
+            case self::DIAG_DBNOCONNECTION: {
+                $nextroute = '_init_step1_dbnoconnection';
+                break;
+            }
+            case self::DIAG_DBMISSING: {
+                $nextroute = '_init_step1_createdb';
+                break;
+            }
+            case self::DIAG_DBEMPTY: {
+                $nextroute = '_init_step1_createschema';
+                break;
+            }
+            case self::DIAG_APPNOTINITIALIZED:
+            case self::DIAG_SYSTEMSTATUSMISSING:
+            case self::DIAG_CONFIGUREDVERSIONTOOHIGH:
+            case self::DIAG_CONFIGUREDVERSIONTOOLOW: {
+                $nextroute = '_init_step2';
+                break;
+            }
+            case self::DIAG_OK: {
+                $nextroute = '_init_finish';
+                break;
+            }
         }
 
         return new Response($this->twig->render('@PulpyCore/Initialization/welcome.html.twig', array(
@@ -157,6 +238,10 @@ class InitializationController {
 
     public function step1CreateDbAction(Request $request) {
         
+        if(($response = $this->ensureInitializationModeOn()) !== TRUE) {
+            return $response;
+        }
+
         $form = $this->formfactory->create(new FormType\WelcomeStep1Type());
         $form->handleRequest($request);
 
@@ -177,6 +262,10 @@ class InitializationController {
 
     public function step1CreateSchemaAction(Request $request) {
         
+        if(($response = $this->ensureInitializationModeOn()) !== TRUE) {
+            return $response;
+        }
+
         $form = $this->formfactory->create(new FormType\WelcomeStep1Type());
         $form->handleRequest($request);
 
@@ -196,6 +285,10 @@ class InitializationController {
 
     public function step2Action(Request $request) {
         
+        if(($response = $this->ensureInitializationModeOn()) !== TRUE) {
+            return $response;
+        }
+
         $form = $this->formfactory->create(new FormType\WelcomeStep2Type());
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -219,7 +312,7 @@ class InitializationController {
             $this->em->flush();
 
             # We mark the application as initialized
-            $app['system.status']->setInitialized(TRUE);
+            $this->systemstatus->setInitialized(TRUE);
 
             return new RedirectResponse($this->urlgenerator->generate('_init_finish'));
         }
@@ -230,22 +323,39 @@ class InitializationController {
     }
 
     public function finishAction(Request $request) {
+        if(($response = $this->ensureInitializationModeOn()) !== TRUE) {
+            return $response;
+        }
+
         return new Response($this->twig->render('@PulpyCore/Initialization/init_finish.html.twig'));
     }
 
     /* Utilitary functions */
 
-    protected function createDatabase(\Doctrine\DBAL\Connection $connection) {
+    protected function ensureInitializationModeOn() {
+        if($this->environment->getInitializationMode() !== TRUE) {
+            
+            if($this->appdiag === self::DIAG_OK) {
+                return new RedirectResponse($this->urlgenerator->generate('home'));
+            }
+
+            return new Response('Initialization mode off. Access denied.', 401);
+        }
+
+        return TRUE;
+    }
+
+    protected function createDatabase(Connection $connection) {
         $databasecreator = new PulpyServices\Maintenance\DatabaseCreatorService();
         return $databasecreator->createDatabase($connection);
     }
 
-    protected function createSchema(\Doctrine\ORM\EntityManager $em) {
+    protected function createSchema(EntityManager $em) {
         $ormschemacreator = new PulpyServices\Maintenance\ORMSchemaCreatorService();
         return $ormschemacreator->createSchema($em);
     }
 
-    protected function createSystemStatus(\Doctrine\ORM\EntityManager $em, $appversion) {
+    protected function createSystemStatus(EntityManager $em, $appversion) {
         $systemStatus = new SystemStatus();
         $systemStatus->setConfiguredversion($appversion);
         $systemStatus->setInitialized(FALSE);
@@ -254,10 +364,10 @@ class InitializationController {
         $em->flush();
     }
 
-    protected function createSiteConfig(\Doctrine\ORM\EntityManager $em, PulpyServices\Context\EnvironmentService $environment) {
+    protected function createSiteConfig(EntityManager $em, PulpyServices\Context\EnvironmentService $environment) {
 
         #$configfile = $rootdir . '/data/config/config.yml';
-        $configfile = $environment->getSrcdir() . '/Pulpy/Core/Resources/config/config.yml.dist';
+        $configfile = $environment->getSrcdir() . '/Pulpy/CoreBundle/Resources/config/config.yml.dist';
 
         $siteconfig = new HierarchicalConfig();
         $siteconfig->setName('config.site');

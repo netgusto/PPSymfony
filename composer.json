@@ -19,6 +19,8 @@
         "sensio/framework-extra-bundle": "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
 
+        "symfony/proxy-manager-bridge": "2.5.*",
+
         "netgusto/devserver-bundle": "dev-master",
 
         "leafo/lessphp": "~0.4.0",
@@ -41,7 +43,11 @@
         
         "brianium/habitat": "v1.0.0",
 
-        "twbs/bootstrap": "v3.2.0"
+        "twbs/bootstrap": "v3.2.0",
+
+        "zipball/purecss": "~0.5",
+        "zipball/purecss-layout-sidemenu": "~0.5",
+        "zipball/purecss-layout-email": "~0.5"
 
     },
     "require-dev": {
@@ -136,6 +142,39 @@
                     "type": "zip"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "zipball/purecss",
+                "version": "0.5.0",
+                "dist": {
+                    "url": "https://github.com/yui/pure-release/archive/v0.5.0.zip",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "zipball/purecss-layout-sidemenu",
+                "version": "0.5.0",
+                "dist": {
+                    "url": "http://purecss.io/layouts/side-menu/download",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "zipball/purecss-layout-email",
+                "version": "0.5.0",
+                "dist": {
+                    "url": "http://purecss.io/layouts/email/download",
+                    "type": "zip"
+                }
+            }
         }
     ],
     "scripts": {
@@ -195,7 +234,11 @@
                 "netgusto/pulpy-theme-medium",
                 "netgusto/pulpy-theme-casper",
                 
-                "twbs/bootstrap"
+                "twbs/bootstrap",
+
+                "zipball/purecss",
+                "zipball/purecss-layout-sidemenu",
+                "zipball/purecss-layout-email"
             ]
         }
     }

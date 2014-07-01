@@ -14,6 +14,14 @@ class SystemStatusService {
 
     public function __construct(EntityManager $em) {
         $this->em = $em;
+        $this->systemstatus = null;
+    }
+
+    protected function fetch() {
+        
+        if(!is_null($this->systemstatus)) {
+            return;
+        }
 
         # Initialize system status if needed
         $results = $this->em->getRepository('Pulpy\CoreBundle\Entity\SystemStatus')->findAll();
@@ -24,36 +32,47 @@ class SystemStatusService {
         }
 
         throw new SystemStatusMissingMaintenanceNeededException();
-
-        /*
-        # We have to create the system status line
-        $systemstatus = new SystemStatus();
-        $this->em->persist($systemstatus);
-        $this->em->flush($systemstatus);
-
-        # Initialize system status if needed
-        $results = $this->em->getRepository('Pulpy\CoreBundle\Entity\SystemStatus')->findAll();
-        $this->systemstatus = $results[0];
-        */
     }
 
     public function getPostCacheLastUpdate() {
+        $this->fetch();
         return $this->systemstatus->getPostcachelastupdate();
     }
 
     public function setPostCacheLastUpdate(\DateTime $postlastcacheupdate) {
+        $this->fetch();
         $this->systemstatus->setPostcachelastupdate($postlastcacheupdate);
         $this->em->persist($this->systemstatus);
         $this->em->flush();
+
+        return $this;
     }
 
     public function getInitialized() {
+        $this->fetch();
         return $this->systemstatus->getInitialized();
     }
 
     public function setInitialized($initialized) {
+        $this->fetch();
         $this->systemstatus->setInitialized($initialized);
         $this->em->persist($this->systemstatus);
         $this->em->flush();
+
+        return $this;
+    }
+
+    public function getConfiguredversion() {
+        $this->fetch();
+        return $this->systemstatus->getConfiguredversion();
+    }
+
+    public function setConfiguredversion($configuredversion) {
+        $this->fetch();
+        $this->systemstatus->setConfiguredversion($configuredversion);
+        $this->em->persist($this->systemstatus);
+        $this->em->flush();
+
+        return $this;
     }
 }

@@ -38,7 +38,7 @@ class EnvironmentService {
         $this->siteurl = $this->scheme . '://' . $rootrequest->getHttpHost() . $rootrequest->getBaseUrl();
 
         $this->debug = $this->scalarinterpreter->toBooleanDefaultFalse($this->getEnv('DEBUG'));
-        $this->initializationmode = FALSE;
+        $this->initializationmode = $this->scalarinterpreter->toBooleanDefaultFalse($this->getEnv('INITIALIZATION_MODE'));
     }
 
     public function getEnv($what) {
@@ -89,6 +89,7 @@ class EnvironmentService {
         return $this->themesdir;
     }
 
+    /*
     ###########################################################################
     # Setter for maintenance mode
     ###########################################################################
@@ -100,5 +101,5 @@ class EnvironmentService {
 
         $this->initializationmode = $initializationmode;
         return $this;
-    }
+    }*/
 }

@@ -9,8 +9,12 @@ class ScalarInterpreterService {
 
     public function toBooleanDefaultFalse($value) {
 
+        if(is_string($value)) {
+            $value = strtolower($value);
+        }
+
         if(in_array(
-            strtolower($value),
+            $value,
             array(TRUE, 'true', 'on', 'yes'),
             TRUE    # strict comparison
         )) {
@@ -22,8 +26,12 @@ class ScalarInterpreterService {
 
     public function toBooleanDefaultTrue($value) {
 
+        if(is_string($value)) {
+            $value = strtolower($value);
+        }
+
         if(in_array(
-            strtolower($value),
+            $value,
             array(FALSE, 'false', 'off', 'no'),
             TRUE    # strict comparison
         )) {

@@ -1,0 +1,9 @@
+# Variables in this file are overriden by environment variables, if present
+parameters:
+    environment:
+        DATABASE_URL: mysql://root:@127.0.0.1:3306/pulpypaas
+        INITIALIZATION_MODE: TRUE
+        STORAGE: S3
+        S3_BUCKET: mozza
+        S3_KEYID: AKIAJD4Y6E4HO45YG27Q
+        S3_SECRET: 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

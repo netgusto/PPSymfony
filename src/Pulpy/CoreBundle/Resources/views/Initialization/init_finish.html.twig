@@ -9,6 +9,12 @@
     {% endblock header %}
 
     {% block content %}
+
+        <h1 class="content-subhead">Pulpy is initialized</h1>
+
+        <p>In order to start your blog, you have to set the <em>INITIALIZATION_MODE</em> environment variable to <strong>FALSE</strong>.</p>
+        
+        {#
         <h1 class="content-subhead">Your account has been created</h1>
 
         <p>We have also created some example posts for you. Feel free to delete them.</p>
@@ -23,6 +29,7 @@
                  <p class="mt3 text-center"><a href="{{ path('admin.home') }}" class="button-xxlarge pure-button pure-button-primary">Customize your blog <i class="fa fa-wrench"></i></a></p>
             </div>
         </div>
+        #}
 
        
     {% endblock content %}
