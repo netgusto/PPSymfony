@@ -1,0 +1,8 @@
+services:
+
+    pulpy.adminbundle.autoroute:
+        class: Netgusto\AutorouteBundle\Routing\AutorouteProvider
+        arguments:
+            resource: "%srcdir%/Pulpy/AdminBundle/Resources/config/routing.yml"
+        tags:
+            - { name: autoroute.provider, prefix: /admin }

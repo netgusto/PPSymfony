@@ -1,26 +1,18 @@
 <?php
 
-namespace Pulpy\CoreBundle\DependencyInjection;
+namespace Pulpy\AdminBundle\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-
-use Symfony\Component\DependencyInjection\Loader,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-
+use Symfony\Component\DependencyInjection\Loader;
 
 /**
  * This is the class that loads and manages your bundle configuration
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class PulpyCoreExtension extends Extension implements PrependExtensionInterface {
-
-    public function prepend(ContainerBuilder $container) {
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('distribution.yml');
-    }
+class PulpyAdminExtension extends Extension {
 
     /**
      * {@inheritDoc}
@@ -32,5 +24,8 @@ class PulpyCoreExtension extends Extension implements PrependExtensionInterface 
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        #$container->get('twig')->addPath('%rootdir%src/Pulpy/AdminBundle/Resources/views', 'PulpyAdmin');
+        #var_dump($container->getDefinition('twig'));
     }
 }

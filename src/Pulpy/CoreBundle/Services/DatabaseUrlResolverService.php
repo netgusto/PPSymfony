@@ -49,13 +49,16 @@ class DatabaseUrlResolverService {
     public function resolve($url)
     {
         // some special cases for sqlite urls
-        if (strpos($url, 'sqlite:///') === 0) {
-            $parts = parse_url('sqlite://host/' . substr($url, 10));
-        } else if (strpos($url, 'pdo_sqlite:///') === 0) {
-            $parts = parse_url('pdo_sqlite://host/' . substr($url, 14));
+        if (stripos($url, 'sqlite://') === 0) {
+            $parts = parse_url('sqlite://host/' . substr($url, 9));
+        } else if (stripos($url, 'pdo_sqlite://') === 0) {
+            $parts = parse_url('pdo_sqlite://host/' . substr($url, 13));
         } else {
             $parts = parse_url($url);
         }
+
+        #echo '<pre>' . print_r($parts, TRUE) . '</pre>';
+        #die($url);
 
         if (false === $parts) {
             throw new \LogicException("Invalid url '{$url}'.");
@@ -76,7 +79,7 @@ class DatabaseUrlResolverService {
             if ($url === 'pdo_sqlite://:memory:' || $url === 'sqlite://:memory:') {
                 $parameters['path'] = ':memory:';
             } else {
-                $parameters['path'] = isset($parts['path']) ? $parts['path'] : ':memory:';
+                $parameters['path'] = isset($parts['path']) ? ltrim($parts['path'], '/') : ':memory:';
             }
 
             if ($parameters['path'] === ':memory:') {
@@ -88,8 +91,8 @@ class DatabaseUrlResolverService {
 
             if (isset($parts['query'])) {
                 parse_str($parts['query'], $query);
-                if (isset($query['relative'])) {
-                    $parameters['path'] = ltrim($parameters['path'], '/');
+                if (isset($query['absolute']) && $parameters['path'] !== ':memory:') {
+                    $parameters['path'] = '/' . $parameters['path'];
                 }
             }
 

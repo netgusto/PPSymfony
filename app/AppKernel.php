@@ -18,6 +18,8 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Pulpy\CoreBundle\PulpyCoreBundle(),
             new Netgusto\DevServerBundle\NetgustoDevServerBundle(),
+            new Pulpy\AdminBundle\PulpyAdminBundle(),
+            new Netgusto\AutorouteBundle\NetgustoAutorouteBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

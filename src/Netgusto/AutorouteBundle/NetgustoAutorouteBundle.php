@@ -1,21 +1,22 @@
 <?php
 
-namespace Pulpy\CoreBundle;
+namespace Netgusto\AutorouteBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle,
     Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Compiler\PassConfig;
 
-use Pulpy\CoreBundle\DependencyInjection\Compiler\PlatformServiceCompilerPass;
+use Netgusto\AutorouteBundle\DependencyInjection\Compiler\AutorouteCompilerPass;
 
-class PulpyCoreBundle extends Bundle {
-    
+class NetgustoAutorouteBundle extends Bundle {
+
     public function build(ContainerBuilder $container) {
         parent::build($container);
-        
+
         $container->addCompilerPass(
-            new PlatformServiceCompilerPass(),
+            new AutorouteCompilerPass(),
             PassConfig::TYPE_BEFORE_OPTIMIZATION
         );
     }
+
 }

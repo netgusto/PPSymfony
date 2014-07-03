@@ -3,14 +3,21 @@ services:
     # tagged services - need to be injected with container to allow lazy-loading for dependencies
     # useful for avoiding db-based dependencies problems (like site.config) when initializing the application
 
+    pulpy.corebundle.autoroute:
+        class: Netgusto\AutorouteBundle\Routing\AutorouteProvider
+        arguments:
+            - "%srcdir%/Pulpy/CoreBundle/Resources/config/routing.yml"
+        tags:
+            - { name: autoroute.provider }
+
     watch.systemhealth:
         class: Pulpy\CoreBundle\EventListener\SystemHealthCheckerListener
         arguments:
             # Event listener are not lazyloaded, so need to inject service container to lazyload initialization.controller
             - @service_container
             - @environment
-            #- @system.status
             - @database_connection
+            # LAZYLOADED # - @system.status
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
@@ -58,15 +65,10 @@ services:
     scalar.interpreter:
         class: Pulpy\CoreBundle\Services\ScalarInterpreterService
 
-    environment.resolver:
-        class: Pulpy\CoreBundle\Services\Context\EnvironmentResolverService
-        arguments:
-            - %environment%
-
     environment:
         class: Pulpy\CoreBundle\Services\Context\EnvironmentService
         arguments:
-            - %resolved_env%
+            - %environment_resolved%
             - @scalar.interpreter
             - %rootdir%
 

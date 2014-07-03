@@ -1,0 +1,7 @@
+# Application defaults parameters
+parameters:
+
+    environment.application.defaults:
+
+        DATABASE_URL: sqlite://%rootdir%/data/db.sqlite
+        INITIALIZATION_MODE: TRUE
