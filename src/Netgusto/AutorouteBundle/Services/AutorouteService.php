@@ -32,7 +32,9 @@ class AutorouteService implements LoaderInterface {
         reset($this->autorouteproviders);
         foreach($this->autorouteproviders as $autorouteprovider) {
 
-            $routes = $autorouteprovider['provider']->getRouteCollection();
+            $routes = $autorouteprovider['provider']->getRouteCollection(
+                $this->getResolver()
+            );
             
             if(!is_null($autorouteprovider['prefix'])) {
                 $routes->addPrefix($autorouteprovider['prefix']);
@@ -49,9 +51,10 @@ class AutorouteService implements LoaderInterface {
     }
 
     public function getResolver() {
+        return $this->resolver;
     }
 
     public function setResolver(LoaderResolverInterface $resolver) {
-        # irrelevant to us, since we don't need a resolver
+        $this->resolver = $resolver;
     }
 }

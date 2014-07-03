@@ -3,7 +3,8 @@
 namespace Netgusto\AutorouteBundle\Routing;
 
 use Symfony\Component\Routing\Loader\YamlFileLoader,
-    Symfony\Component\Config\FileLocator;
+    Symfony\Component\Config\FileLocator,
+    Symfony\Component\Config\Loader\LoaderResolverInterface;
 
 use Netgusto\AutorouteBundle\Services\AutorouteProviderInterface;
 
@@ -15,8 +16,9 @@ class AutorouteProvider implements AutorouteProviderInterface {
         $this->resourcepath = $resourcepath;
     }
 
-    public function getRouteCollection() {
+    public function getRouteCollection(LoaderResolverInterface $resolver) {
         $loader = new YamlFileLoader(new FileLocator());
+        $loader->setResolver($resolver);
         return $loader->load($this->resourcepath);
     }
 }
