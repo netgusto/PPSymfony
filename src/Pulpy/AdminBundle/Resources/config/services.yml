@@ -6,3 +6,15 @@ services:
             resource: "%srcdir%/Pulpy/AdminBundle/Resources/config/routing.yml"
         tags:
             - { name: autoroute.provider, prefix: /admin }
+
+    admin.auth.controller:
+        class: Pulpy\AdminBundle\Controller\AuthController
+        arguments:
+            - @twig
+            - @security.context
+
+    admin.posts.controller:
+        class: Pulpy\AdminBundle\Controller\PostsController
+        arguments:
+            - @twig
+            - @post.repository

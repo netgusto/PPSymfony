@@ -7,6 +7,9 @@ imports:
     - { resource: preprocessors/database_loader.php }
     - { resource: security.yml }
 
+    - { resource: "@PulpyAdminBundle/Resources/config/config.yml" }
+    - { resource: "@PulpyRestBundle/Resources/config/config.yml" }
+
 framework:
     #esi:             ~
     #translator:      { fallback: "%locale%" }
@@ -45,6 +48,7 @@ assetic:
     bundles:        [ ]
     filters:
         cssrewrite: ~
+        lessphp: ~
 
 # Doctrine Configuration
 doctrine:

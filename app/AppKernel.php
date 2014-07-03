@@ -16,10 +16,15 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+
+            new FOS\RestBundle\FOSRestBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
+
             new Pulpy\CoreBundle\PulpyCoreBundle(),
             new Netgusto\DevServerBundle\NetgustoDevServerBundle(),
             new Pulpy\AdminBundle\PulpyAdminBundle(),
             new Netgusto\AutorouteBundle\NetgustoAutorouteBundle(),
+            new Pulpy\RestBundle\PulpyRestBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

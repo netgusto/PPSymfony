@@ -35,7 +35,7 @@ class SystemHealthCheckerListener {
         $exception = null;
 
         if($this->environment->getInitializationMode() === TRUE) {
-            $exception = new CoreException\InitializationNeeded\InstallModeActivatedInitializationNeededException();
+            throw new CoreException\InitializationNeeded\InstallModeActivatedInitializationNeededException();
         } else {
             
             # Checking systemstatus (db-based) will trigger a database (DBAL or PDO) exception if database is not initialized

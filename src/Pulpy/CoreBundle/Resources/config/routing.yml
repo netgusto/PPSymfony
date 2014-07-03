@@ -52,7 +52,7 @@ json.post:
         slug: .+
 
 post:
-    pattern: /{slug}
+    pattern: /post/{slug}
     defaults: { _controller: post.controller:indexAction }
     requirements:
         slug: .+

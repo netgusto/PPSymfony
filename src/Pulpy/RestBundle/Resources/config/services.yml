@@ -1,0 +1,8 @@
+services:
+
+    pulpy.restbundle.autoroute:
+        class: Netgusto\AutorouteBundle\Routing\AutorouteProvider
+        arguments:
+            resource: "%srcdir%/Pulpy/RestBundle/Resources/config/routing.yml"
+        tags:
+            - { name: autoroute.provider, prefix: /api }

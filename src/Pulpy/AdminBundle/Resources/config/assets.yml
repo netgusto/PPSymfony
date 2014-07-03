@@ -1,0 +1,10 @@
+assetic:
+    assets:
+
+        admin_css:
+            inputs:
+                - "@PulpyAdminBundle/Resources/sources/less/styles.less"
+            filters:
+                - lessphp
+                - cssrewrite
+            output: assets/admin/css/styles.css

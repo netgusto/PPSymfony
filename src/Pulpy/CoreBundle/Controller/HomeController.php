@@ -24,7 +24,15 @@ class HomeController {
     protected $postsperpage;
     protected $router;
 
-    public function __construct(Twig_Environment $twig, PostRepository $postRepo, PostFileResolverService $postpathresolver, CultureService $culture, SiteConfigService $siteconfig, Router $router, $postsperpage = 5) {
+    public function __construct(
+        Twig_Environment $twig,
+        PostRepository $postRepo,
+        PostFileResolverService $postpathresolver,
+        CultureService $culture,
+        SiteConfigService $siteconfig,
+        Router $router,
+        $postsperpage = 5
+    ) {
         $this->twig = $twig;
         $this->postRepo = $postRepo;
         $this->postpathresolver = $postpathresolver;
@@ -43,7 +51,7 @@ class HomeController {
 
             $post = new Post();
             $post->setTitle('Oh no ! not a single post to display !');
-            $post->setSlug('#');
+            $post->setSlug('oh-noes');
             $post->setIntro("It looks like you don't have any post in your blog yet. To add a post, create a file in `data/posts`.");
             $post->setAuthor($this->siteconfig->getOwnername());
             $post->setDate($date);

@@ -1,3 +1,13 @@
 admin.home:
     pattern: /
-    defaults: { _controller: home.controller:indexAction }
+    defaults: { _controller: admin.posts.controller:indexAction }
+
+admin.login:
+    pattern: /login
+    defaults: { _controller: admin.auth.controller:indexAction }
+
+admin.logout:
+    pattern: /logout
+
+admin.authcheck:
+    pattern: /authcheck

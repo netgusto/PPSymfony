@@ -47,7 +47,9 @@
 
         "zipball/purecss": "~0.5",
         "zipball/purecss-layout-sidemenu": "~0.5",
-        "zipball/purecss-layout-email": "~0.5"
+        "zipball/purecss-layout-email": "~0.5",
+        "friendsofsymfony/rest-bundle": "1.4.0",
+        "jms/serializer-bundle": "0.13.*"
 
     },
     "require-dev": {

@@ -1,0 +1,3 @@
+pulpy.rest:
+    type: rest
+    resource: Pulpy\RestBundle\Controller\PostsController
