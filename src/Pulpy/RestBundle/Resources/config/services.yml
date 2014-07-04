@@ -6,3 +6,6 @@ services:
             resource: "%srcdir%/Pulpy/RestBundle/Resources/config/routing.yml"
         tags:
             - { name: autoroute.provider, prefix: /api }
+
+    rest.posts.controller:
+        class: Pulpy\RestBundle\Controller\PostsController
