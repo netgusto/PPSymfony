@@ -21,6 +21,7 @@
 
         "symfony/proxy-manager-bridge": "2.5.*",
 
+	"netgusto/autoroute-bundle": "1.0.0",
         "netgusto/devserver-bundle": "dev-master",
 
         "leafo/lessphp": "~0.4.0",

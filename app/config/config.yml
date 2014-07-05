@@ -73,3 +73,9 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+jms_serializer:
+    metadata:
+        directories:
+            PulpyCore:
+                path: "@PulpyCoreBundle/Resources/config/serializer"

@@ -9,3 +9,7 @@ services:
 
     rest.posts.controller:
         class: Pulpy\RestBundle\Controller\PostsController
+        arguments:
+            - @fos_rest.view_handler.default
+            - @post.repository
+            - @fos_rest.serializer

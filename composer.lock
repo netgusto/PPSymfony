@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a90adae894dcdc31f18cb7a3f36d4a54",
+    "hash": "f0f6612f67138f3298f767df0636ed5e",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1515,6 +1515,49 @@
             "time": "2014-06-04 16:30:04"
         },
         {
+            "name": "netgusto/autoroute-bundle",
+            "version": "1.0.0",
+            "target-dir": "Netgusto/AutorouteBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/netgusto/Symfony-AutorouteBundle.git",
+                "reference": "b3d544e552da696b8dde3dd141eb03dbfd884ac8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/netgusto/Symfony-AutorouteBundle/zipball/b3d544e552da696b8dde3dd141eb03dbfd884ac8",
+                "reference": "b3d544e552da696b8dde3dd141eb03dbfd884ac8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/framework-bundle": "~2.4"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Netgusto\\AutorouteBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Net Gusto",
+                    "email": "contact@netgusto.com"
+                }
+            ],
+            "description": "Symfony2 Autoroute Bundle",
+            "homepage": "https://github.com/netgusto/Symfony-AutorouteBundle",
+            "keywords": [
+                "autoroute",
+                "symfony"
+            ],
+            "time": "2014-07-04 12:05:16"
+        },
+        {
             "name": "netgusto/devserver-bundle",
             "version": "dev-master",
             "target-dir": "Netgusto/DevServerBundle",
@@ -2081,21 +2124,20 @@
         },
         {
             "name": "symfony/icu",
-            "version": "v1.2.1",
+            "version": "v1.0.1",
             "target-dir": "Symfony/Component/Icu",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Icu.git",
-                "reference": "98e197da54df1f966dd5e8a4992135703569c987"
+                "reference": "fdba214b1e087c149843bde976263c53ac10c975"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Icu/zipball/98e197da54df1f966dd5e8a4992135703569c987",
-                "reference": "98e197da54df1f966dd5e8a4992135703569c987",
+                "url": "https://api.github.com/repos/symfony/Icu/zipball/fdba214b1e087c149843bde976263c53ac10c975",
+                "reference": "fdba214b1e087c149843bde976263c53ac10c975",
                 "shasum": ""
             },
             "require": {
-                "lib-icu": ">=4.4",
                 "php": ">=5.3.3",
                 "symfony/intl": "~2.3"
             },
@@ -2125,7 +2167,7 @@
                 "icu",
                 "intl"
             ],
-            "time": "2013-10-04 10:06:38"
+            "time": "2013-10-04 09:12:07"
         },
         {
             "name": "symfony/monolog-bundle",
@@ -2717,7 +2759,9 @@
             "time": "2014-04-28 14:01:06"
         }
     ],
-    "aliases": [],
+    "aliases": [
+
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "netgusto/devserver-bundle": 20
@@ -2725,5 +2769,7 @@
     "platform": {
         "php": ">=5.3.3"
     },
-    "platform-dev": []
+    "platform-dev": [
+
+    ]
 }
