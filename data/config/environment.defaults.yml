@@ -3,5 +3,5 @@ parameters:
 
     environment.defaults:
 
-        DATABASE_URL: mysql://root:@127.0.0.1:3306/pulpypaas
+        DATABASE_URL: mysql://root:@127.0.0.1:3306/pulpy
         INITIALIZATION_MODE: FALSE

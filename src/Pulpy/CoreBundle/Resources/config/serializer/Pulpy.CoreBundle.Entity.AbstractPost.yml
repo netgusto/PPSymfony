@@ -1,0 +1,27 @@
+# http://jmsyst.com/libs/serializer/master/reference/yml_reference
+
+Pulpy\CoreBundle\Entity\AbstractPost:
+    exclusion_policy: ALL
+    properties:
+        slug:
+            expose: true
+        title:
+            expose: true
+        date:
+            expose: true
+        status:
+            expose: true
+        intro:
+            expose: true
+        content:
+            expose: true
+        image:
+            expose: true
+        comments:
+            expose: true
+        about:
+            expose: true
+        lastmodified:
+            expose: true
+        author:
+            expose: true

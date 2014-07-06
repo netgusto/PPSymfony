@@ -49,6 +49,7 @@ assetic:
     filters:
         cssrewrite: ~
         lessphp: ~
+        coffee: ~
 
 # Doctrine Configuration
 doctrine:
@@ -76,6 +77,7 @@ swiftmailer:
 
 jms_serializer:
     metadata:
+        auto_detection: false
         directories:
             PulpyCore:
                 path: "@PulpyCoreBundle/Resources/config/serializer"

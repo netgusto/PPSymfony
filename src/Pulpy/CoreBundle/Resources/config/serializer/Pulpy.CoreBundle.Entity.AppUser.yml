@@ -1,0 +1,15 @@
+# http://jmsyst.com/libs/serializer/master/reference/yml_reference
+
+Pulpy\CoreBundle\Entity\AppUser:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+        email:
+            expose: true
+        website:
+            expose: true
+        twitter:
+            expose: true
+        bio:
+            expose: true

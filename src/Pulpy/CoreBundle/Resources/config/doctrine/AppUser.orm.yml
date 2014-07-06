@@ -24,6 +24,21 @@ Pulpy\CoreBundle\Entity\AppUser:
             nullable: false
 
         roles:
-            type: json_array        
+            type: json_array
+
+        website:
+            type: string
+            length: 255
+            nullable: true
+
+        bio:
+            type: string
+            length: 255
+            nullable: true
+
+        twitter:
+            type: string
+            length: 255
+            nullable: true
 
     lifecycleCallbacks: {  }

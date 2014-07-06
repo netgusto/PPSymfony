@@ -30,6 +30,21 @@ class AppUser implements UserInterface {
      */
     private $roles;
 
+    /**
+     * @var string
+     */
+    private $website;
+
+    /**
+     * @var string
+     */
+    private $bio;
+
+    /**
+     * @var string
+     */
+    private $twitter;
+
 
     /**
      * Get id
@@ -131,6 +146,75 @@ class AppUser implements UserInterface {
     public function getRoles()
     {
         return $this->roles;
+    }
+
+    /**
+     * Set website
+     *
+     * @param string $website
+     * @return AppUser
+     */
+    public function setWebsite($website)
+    {
+        $this->website = $website;
+
+        return $this;
+    }
+
+    /**
+     * Get website
+     *
+     * @return string 
+     */
+    public function getWebsite()
+    {
+        return $this->website;
+    }
+
+    /**
+     * Set bio
+     *
+     * @param string $bio
+     * @return AppUser
+     */
+    public function setBio($bio)
+    {
+        $this->bio = $bio;
+
+        return $this;
+    }
+
+    /**
+     * Get bio
+     *
+     * @return string 
+     */
+    public function getBio()
+    {
+        return $this->bio;
+    }
+
+    /**
+     * Set twitter
+     *
+     * @param string $twitter
+     * @return AppUser
+     */
+    public function setTwitter($twitter)
+    {
+        $this->twitter = $twitter;
+
+        return $this;
+    }
+
+    /**
+     * Get twitter
+     *
+     * @return string 
+     */
+    public function getTwitter()
+    {
+        return $this->twitter;
     }
 
     ###########################################################################

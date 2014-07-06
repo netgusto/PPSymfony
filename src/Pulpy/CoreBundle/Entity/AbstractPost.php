@@ -18,26 +18,6 @@ abstract class AbstractPost {
     protected $title;
 
     /**
-     * @var string
-     */
-    protected $author;
-
-    /**
-     * @var string
-     */
-    protected $website;
-
-    /**
-     * @var string
-     */
-    protected $bio;
-
-    /**
-     * @var string
-     */
-    protected $twitter;
-
-    /**
      * @var \DateTime
      */
     protected $date;
@@ -88,6 +68,11 @@ abstract class AbstractPost {
     protected $lastmodified;
 
     /**
+     * @var \Pulpy\CoreBundle\Entity\AppUser
+     */
+    protected $author;
+
+    /**
      * Set slug
      *
      * @param string $slug
@@ -131,98 +116,6 @@ abstract class AbstractPost {
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * Set author
-     *
-     * @param string $author
-     * @return AbstractPost
-     */
-    public function setAuthor($author)
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
-    /**
-     * Get author
-     *
-     * @return string 
-     */
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
-     * Set author website
-     *
-     * @param string $author
-     * @return AbstractPost
-     */
-    public function setWebsite($website)
-    {
-        $this->website = $website;
-
-        return $this;
-    }
-
-    /**
-     * Get author website
-     *
-     * @return string 
-     */
-    public function getWebsite()
-    {
-        return $this->website;
-    }
-
-    /**
-     * Set author bio
-     *
-     * @param string $author
-     * @return AbstractPost
-     */
-    public function setBio($bio)
-    {
-        $this->bio = $bio;
-
-        return $this;
-    }
-
-    /**
-     * Get author website
-     *
-     * @return string 
-     */
-    public function getBio()
-    {
-        return $this->bio;
-    }
-
-    /**
-     * Set twitter
-     *
-     * @param string $twitter
-     * @return AbstractPost
-     */
-    public function setTwitter($twitter)
-    {
-        $this->twitter = $twitter;
-
-        return $this;
-    }
-
-    /**
-     * Get twitter
-     *
-     * @return string 
-     */
-    public function getTwitter()
-    {
-        return $this->twitter;
     }
 
     /**
@@ -453,5 +346,28 @@ abstract class AbstractPost {
     public function getLastmodified()
     {
         return $this->lastmodified;
+    }
+
+    /**
+     * Set author
+     *
+     * @param \Pulpy\CoreBundle\Entity\AppUser $author
+     * @return Post
+     */
+    public function setAuthor(\Pulpy\CoreBundle\Entity\AppUser $author = null)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * Get author
+     *
+     * @return \Pulpy\CoreBundle\Entity\AppUser 
+     */
+    public function getAuthor()
+    {
+        return $this->author;
     }
 }

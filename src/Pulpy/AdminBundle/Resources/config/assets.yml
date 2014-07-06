@@ -1,10 +1,17 @@
 assetic:
     assets:
 
-        admin_css:
+        admin_styles_css:
             inputs:
                 - "@PulpyAdminBundle/Resources/sources/less/styles.less"
             filters:
                 - lessphp
                 - cssrewrite
             output: assets/admin/css/styles.css
+
+        admin_main_js:
+            inputs:
+                - "@PulpyAdminBundle/Resources/sources/coffee/main.coffee"
+            filters:
+                - coffee
+            output: assets/admin/js/main.js
