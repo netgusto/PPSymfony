@@ -53,7 +53,7 @@ class HomeController {
             $post->setTitle('Oh no ! not a single post to display !');
             $post->setSlug('oh-noes');
             $post->setIntro("It looks like you don't have any post in your blog yet. To add a post, create a file in `data/posts`.");
-            $post->setAuthor($this->siteconfig->getOwnername());
+            #$post->setAuthor($this->siteconfig->getOwnername());
             $post->setDate($date);
             $post->setComments(FALSE);
 

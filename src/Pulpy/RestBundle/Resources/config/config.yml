@@ -1,3 +1,12 @@
 fos_rest:
+    view:
+        view_response_listener: force
+        formats:
+            json: true
     routing_loader:
+        # no {_format} in the generated routes
+        include_format: false
         default_format: json
+
+sensio_framework_extra:
+    view:    { annotations: false }

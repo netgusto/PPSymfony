@@ -61,7 +61,7 @@ class InitializationExceptionListener {
         }
 
         if($exception instanceof CoreException\MaintenanceNeeded\MaintenanceNeededExceptionInterface) {
-            die('Maintenance needed !');
+            die('Maintenance needed ! (' . get_class($exception) . ')');
         }
     }
 

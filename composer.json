@@ -21,7 +21,7 @@
 
         "symfony/proxy-manager-bridge": "2.5.*",
 
-	"netgusto/autoroute-bundle": "1.0.0",
+        "netgusto/autoroute-bundle": "1.0.0",
         "netgusto/devserver-bundle": "dev-master",
 
         "leafo/lessphp": "~0.4.0",
@@ -50,8 +50,9 @@
         "zipball/purecss-layout-sidemenu": "~0.5",
         "zipball/purecss-layout-email": "~0.5",
         "friendsofsymfony/rest-bundle": "1.4.0",
-        "jms/serializer-bundle": "0.13.*"
+        "jms/serializer-bundle": "0.13.*",
 
+        "jms/security-extra-bundle": "1.5.*"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

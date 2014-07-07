@@ -81,3 +81,6 @@ jms_serializer:
         directories:
             PulpyCore:
                 path: "@PulpyCoreBundle/Resources/config/serializer"
+
+jms_security_extra:
+    expressions: true

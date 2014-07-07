@@ -17,12 +17,18 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        api:
+            pattern: ^/api
+            anonymous: true
+            context: primary_auth
+
         admin_login:
             pattern: ^/admin/login
             anonymous: true
 
         admin:
             pattern: ^/admin
+            context: primary_auth
             
             form_login:
                 login_path: /admin/login
@@ -31,3 +37,9 @@ security:
             logout:
                 path: /admin/logout
                 target: /admin
+
+
+    access_control:
+        #- { path: ^/api/posts/?$, access: "hasRole('ROLE_ADMIN')", methods: [GET] }
+        #- { path: ^/api/posts/.+$, access: "#post", methods: [GET] }
+        - { path: ^/api/.*$, roles: IS_AUTHENTICATED_ANONYMOUSLY }

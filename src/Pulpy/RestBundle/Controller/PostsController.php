@@ -5,9 +5,11 @@ namespace Pulpy\RestBundle\Controller;
 use FOS\RestBundle\View\View AS RestView,
     FOS\RestBundle\View\ViewHandler as RestViewHandler;
 
-use JMS\Serializer\SerializerInterface;
+use JMS\Serializer\SerializerInterface,
+    JMS\SecurityExtraBundle\Annotation\PreAuthorize;
 
-use Pulpy\CoreBundle\Services\Post\PostRepository;
+use Pulpy\CoreBundle\Services\Post\PostRepository,
+    Pulpy\CoreBundle\Entity\Post;
 
 class PostsController {
 
@@ -23,14 +25,22 @@ class PostsController {
     }
 
     public function getPostsAction() {
+        return $this->handleView(
+            $this
+                ->view()
+                ->setData($this->postRepo->findAll())
+        );
+    }
 
-        $view = $this->view();
-        $data = $this->postRepo->findAll();
-        
-        if ($data) {
-            $view->setStatusCode(200)->setData($data[0]);
-        }
+    /** @PreAuthorize("#post.getStatus() == 'publish' OR #post.getAuthor() == user") */
 
-        return $this->handleView($view);
+    public function getPostAction(Post $post) {
+        #$post = $this->postRepo->findOneById($id);
+
+        return $this->handleView(
+            $this
+                ->view()
+                ->setData($post)
+        );
     }
 }

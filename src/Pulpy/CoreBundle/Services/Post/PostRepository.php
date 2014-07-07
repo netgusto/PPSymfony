@@ -18,6 +18,10 @@ class PostRepository {
         $this->em = $em;
     }
 
+    public function findOneById($id) {
+        return $this->em->getRepository('Pulpy\CoreBundle\Entity\Post')->findOneById($id);
+    }
+
     public function findOneBySlug($slug) {
         return $this->em->getRepository('Pulpy\CoreBundle\Entity\Post')->findOneBySlug($slug);
     }
