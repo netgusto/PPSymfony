@@ -35,8 +35,6 @@ class PostsController {
     /** @PreAuthorize("#post.getStatus() == 'publish' OR #post.getAuthor() == user") */
 
     public function getPostAction(Post $post) {
-        #$post = $this->postRepo->findOneById($id);
-
         return $this->handleView(
             $this
                 ->view()

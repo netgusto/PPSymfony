@@ -13,8 +13,7 @@ services:
             - @twig
             - @security.context
 
-    admin.posts.controller:
-        class: Pulpy\AdminBundle\Controller\PostsController
+    admin.app.controller:
+        class: Pulpy\AdminBundle\Controller\AppController
         arguments:
             - @twig
-            - @post.repository

@@ -9,9 +9,23 @@ assetic:
                 - cssrewrite
             output: assets/admin/css/styles.css
 
-        admin_main_js:
+        admin_app_js:
             inputs:
-                - "@PulpyAdminBundle/Resources/sources/coffee/main.coffee"
+                - "@PulpyAdminBundle/Resources/sources/coffee/app/app.coffee"
             filters:
                 - coffee
-            output: assets/admin/js/main.js
+            output: assets/admin/js/app/app.js
+
+        admin_controllers_js:
+            inputs:
+                - "@PulpyAdminBundle/Resources/sources/coffee/app/controllers.coffee"
+            filters:
+                - coffee
+            output: assets/admin/js/app/controllers.js
+
+        admin_directives_js:
+            inputs:
+                - "@PulpyAdminBundle/Resources/sources/coffee/app/directives.coffee"
+            filters:
+                - coffee
+            output: assets/admin/js/app/directives.js

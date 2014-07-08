@@ -9,23 +9,17 @@ use Twig_Environment;
 
 use Pulpy\CoreBundle\Services\Post\PostRepository;
 
-class PostsController {
+class AppController {
 
     protected $twig;
-    protected $postRepo;
 
     public function __construct(
-        Twig_Environment $twig,
-        PostRepository $postRepo
+        Twig_Environment $twig
     ) {
         $this->twig = $twig;
-        $this->postRepo = $postRepo;
     }
 
     public function indexAction(Request $request) {
-        $posts = $this->postRepo->findAll();
-        return new Response($this->twig->render('@PulpyAdmin/Posts/index.html.twig', array(
-            'posts' => $posts,
-        )));
+        return new Response($this->twig->render('@PulpyAdmin/App/index.html.twig'));
     }
 }

@@ -2,7 +2,7 @@
 
 {% block htmlclass 'posts' %}
 
-{% block body %}
+{% block body %}{% verbatim %}
 
 <div id="layout">
     <div id="postlist">
@@ -22,37 +22,17 @@
                 <div>
 
                     <div class="scroller">
-                        <ol class="posts">
-                            {% for post in posts %}
-                            <li>
+                        <ol class="posts" ng-controller="PostsListController as postslist">
+
+                            <li ng-repeat="post in postslist.posts">
                                 <a href="#">
                                     <h3>{{ post.title }}</h3>
                                     <section class="post-meta">
-                                        <span class="post-content">{{ post.intro|inlinemarkdown }}</span>
+                                        <span class="post-content">{{ post.intro }}</span>
                                     </section>
                                 </a>
                             </li>
-                            {% endfor %}
-                            {#
-                            <li class="active">
-                                <a href="#">
-                                    <h3>Welcome to pulpy</h3>
-                                    <section class="post-meta">
-                                        <span class="post-content">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam...</span>
-                                    </section>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <h3>A longer title, for a much deeper post with some awesome quotes</h3>
-                                    <section class="post-meta">
-                                        <span class="post-content">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam...</span>
-                                    </section>
-                                </a>
-                            </li>
-                            #}
+
                         </ol>
                     </div>
 
@@ -153,4 +133,12 @@
         </div>
     </div>
 </div>
+
+{% endverbatim %}{% endblock body %}
+
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript" src="{{ asset("/assets/admin/js/app/app.js") }}"></script>
+<script type="text/javascript" src="{{ asset("/assets/admin/js/app/controllers.js") }}"></script>
+<script type="text/javascript" src="{{ asset("/assets/admin/js/app/directives.js") }}"></script>
 {% endblock %}
