@@ -32,7 +32,7 @@ class PostsController {
         );
     }
 
-    /** @PreAuthorize("#post.getStatus() == 'publish' OR #post.getAuthor() == user") */
+    /** @PreAuthorize("#post.getStatus() == 'publish' OR #post.getAuthor() == user OR hasRole('ROLE_ADMIN')") */
 
     public function getPostAction(Post $post) {
         return $this->handleView(

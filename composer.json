@@ -54,7 +54,9 @@
         "zipball/purecss-layout-sidemenu": "~0.5",
         "zipball/purecss-layout-email": "~0.5",
 
-        "zipball/angularjs": "1.3.0-beta.14"
+        "zipball/angularjs": "1.3.0-beta.14",
+        "zipball/breezejs": "1.4.14",
+        "zipball/breezejs-angular": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
@@ -181,6 +183,28 @@
                     "type": "zip"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "zipball/breezejs",
+                "version": "1.4.14",
+                "dist": {
+                    "url": "http://www.breezejs.com/sites/default/files/packages/breeze-runtime-1.4.14.zip",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "zipball/breezejs-angular",
+                "version": "dev-master",
+                "dist": {
+                    "url": "https://github.com/Breeze/breeze.js.labs/archive/master.zip",
+                    "type": "zip"
+                }
+            }
         }
     ],
     "scripts": {
@@ -243,7 +267,9 @@
                 "zipball/purecss",
                 "zipball/purecss-layout-sidemenu",
                 "zipball/purecss-layout-email",
-                "zipball/angularjs"
+                "zipball/angularjs",
+                "zipball/breezejs",
+                "zipball/breezejs-angular"
             ]
         }
     }
