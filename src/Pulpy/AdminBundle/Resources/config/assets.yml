@@ -29,3 +29,10 @@ assetic:
             filters:
                 - coffee
             output: assets/admin/js/app/directives.js
+
+        admin_emberapp_js:
+            inputs:
+                - "@PulpyAdminBundle/Resources/sources/coffee/emberapp/app.coffee"
+            filters:
+                - coffee
+            output: assets/admin/js/emberapp/app.js

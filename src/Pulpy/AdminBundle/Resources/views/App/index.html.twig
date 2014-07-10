@@ -4,6 +4,16 @@
 
 {% block body %}{% verbatim %}
 
+<script type="text/x-handlebars">
+{{outlet}}
+</script>
+
+<script type="text/x-handlebars" id="index">
+    <p>{{#link-to 'posts'}}Les posts{{/link-to}}</p>
+</script>
+
+
+<script type="text/x-handlebars" id="posts">
 <div id="layout">
     <div id="postlist">
         <div class="list-inner">
@@ -22,17 +32,17 @@
                 <div>
 
                     <div class="scroller">
-                        <ol class="posts" ng-controller="PostsListController as postslistCtrl">
-
-                            <li ng-repeat="post in postslistCtrl.posts">
-                                <a ng-click="postslistCtrl.postClicked(post)">
-                                    <h3>{{ post.title }}</h3>
-                                    <section class="post-meta">
-                                        <span class="post-content">{{ post.intro }}</span>
-                                    </section>
-                                </a>
-                            </li>
-
+                        <ol class="posts">
+                        {{#each post in model}}
+                        <li>
+                            <a href="#">
+                                <h3>{{ post.title }}</h3>
+                                <section class="post-meta">
+                                    <span class="post-content">{{ post.intro }}</span>
+                                </section>
+                            </a>
+                        </li>
+                        {{/each}}
                         </ol>
                     </div>
 
@@ -69,12 +79,11 @@
         </div>
     </div>
 </div>
+</script>
 
 {% endverbatim %}{% endblock body %}
 
 {% block javascripts %}
 {{ parent() }}
-<script type="text/javascript" src="{{ asset("/assets/admin/js/app/app.js") }}"></script>
-<script type="text/javascript" src="{{ asset("/assets/admin/js/app/controllers.js") }}"></script>
-<script type="text/javascript" src="{{ asset("/assets/admin/js/app/directives.js") }}"></script>
+<script type="text/javascript" src="{{ asset("/assets/admin/js/emberapp/app.js") }}"></script>
 {% endblock %}

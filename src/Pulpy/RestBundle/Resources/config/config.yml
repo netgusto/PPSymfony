@@ -1,3 +1,6 @@
+parameters:
+    jms_serializer.json_serialization_visitor.class: 'Pulpy\RestBundle\Serializer\SideLoadJsonSerializationVisitor'
+
 fos_rest:
     view:
         view_response_listener: force

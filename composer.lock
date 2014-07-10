@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b548a000a826cfa9783ff86871a7a209",
+    "hash": "87c9928f8242db1c487e92ee4ef1d4f1",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -803,6 +803,39 @@
             "time": "2014-06-10 11:49:08"
         },
         {
+            "name": "ember/ember",
+            "version": "1.6.0",
+            "dist": {
+                "type": "file",
+                "url": "http://cdnjs.cloudflare.com/ajax/libs/ember.js/1.6.0/ember.min.js",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
+            "name": "ember/ember-data",
+            "version": "1.0.0-beta.8",
+            "dist": {
+                "type": "file",
+                "url": "http://cdnjs.cloudflare.com/ajax/libs/ember-data.js/1.0.0-beta.8/ember-data.min.js",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
+            "name": "ember/ember-debug",
+            "version": "1.6.0",
+            "dist": {
+                "type": "file",
+                "url": "http://cdnjs.cloudflare.com/ajax/libs/ember.js/1.6.0/ember-debug.js",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
             "name": "font-awesome/font-awesome",
             "version": "4.1.0",
             "dist": {
@@ -983,6 +1016,17 @@
                 "web service"
             ],
             "time": "2014-05-07 17:04:22"
+        },
+        {
+            "name": "handlebars/handlebars",
+            "version": "1.3.0",
+            "dist": {
+                "type": "file",
+                "url": "http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v1.3.0.js",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -2892,28 +2936,6 @@
             "type": "library"
         },
         {
-            "name": "zipball/breezejs",
-            "version": "1.4.14",
-            "dist": {
-                "type": "zip",
-                "url": "http://www.breezejs.com/sites/default/files/packages/breeze-runtime-1.4.14.zip",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "library"
-        },
-        {
-            "name": "zipball/breezejs-angular",
-            "version": "dev-master",
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/Breeze/breeze.js.labs/archive/master.zip",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "library"
-        },
-        {
             "name": "zipball/highlightjs",
             "version": "8.0",
             "dist": {
@@ -3015,7 +3037,7 @@
     "stability-flags": {
         "netgusto/devserver-bundle": 20,
         "zipball/angularjs": 10,
-        "zipball/breezejs-angular": 20
+        "ember/ember-data": 10
     },
     "platform": {
         "php": ">=5.3.3"

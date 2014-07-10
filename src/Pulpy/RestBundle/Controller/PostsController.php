@@ -28,7 +28,9 @@ class PostsController {
         return $this->handleView(
             $this
                 ->view()
-                ->setData($this->postRepo->findAll())
+                ->setData(array(
+                    'posts' => $this->postRepo->findAll()
+                ))
         );
     }
 
