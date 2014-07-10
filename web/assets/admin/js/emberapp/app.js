@@ -27,7 +27,11 @@
    */
 
   PulpyAdmin.Router.map(function() {
-    return this.resource('posts');
+    return this.resource('posts', function() {
+      return this.resource('posts.view', {
+        path: '/view/:posts_id'
+      });
+    });
   });
 
   PulpyAdmin.PostsRoute = Ember.Route.extend({
@@ -49,10 +53,12 @@
     twitter: DS.attr('string')
   });
 
-  PulpyAdmin.PostsController = Ember.ArrayController.extend({});
-
   PulpyAdmin.PostsView = Ember.View.extend({
-    tagName: 'span'
+    classNames: ['posts-view']
+  });
+
+  PulpyAdmin.ApplicationView = Ember.View.extend({
+    classNames: ['application-view']
   });
 
 }).call(this);

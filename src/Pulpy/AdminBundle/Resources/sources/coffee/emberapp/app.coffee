@@ -23,7 +23,8 @@ PulpyAdmin.ApplicationSerializer = DS.RESTSerializer.extend(
 ###
 
 PulpyAdmin.Router.map () ->
-    @resource 'posts'
+    @resource 'posts', () ->
+        @resource 'posts.view', { path: '/view/:posts_id' }
 
 PulpyAdmin.PostsRoute = Ember.Route.extend(
     model: () ->
@@ -43,8 +44,12 @@ PulpyAdmin.Appuser = DS.Model.extend(
     twitter: DS.attr('string')
 )
 
-PulpyAdmin.PostsController = Ember.ArrayController.extend({})
+#PulpyAdmin.PostsController = Ember.ArrayController.extend({})
 
 PulpyAdmin.PostsView = Ember.View.extend(
-  tagName: 'span'
+  classNames: ['posts-view']
+)
+
+PulpyAdmin.ApplicationView = Ember.View.extend(
+  classNames: ['application-view']
 )

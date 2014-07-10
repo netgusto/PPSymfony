@@ -2,9 +2,17 @@
 
 html.posts {
 
-    &, body {
+    &, body,
+    .ember-view.application-view,
+    .ember-view.posts-view {
         height: 100%;
         overflow: hidden;
+    }
+
+    #layout {
+        height: ~"calc(100% - " @barheight ~" - 1rem)"; // barre - marge top layout
+        height: ~"-webkit-calc(100% - " @barheight ~" - 1rem)"; // barre - marge top layout
+        height: ~"-moz-calc(100% - " @barheight ~" - 1rem)"; // barre - marge top layout
     }
 
     #postlist {
@@ -95,12 +103,6 @@ html.posts {
 
     #postlist, #main {
         height: 100%;
-    }
-
-    #layout {
-        height: ~"calc(100% - " @barheight ~" - 1rem)"; // barre - marge top layout
-        height: ~"-webkit-calc(100% - " @barheight ~" - 1rem)"; // barre - marge top layout
-        height: ~"-moz-calc(100% - " @barheight ~" - 1rem)"; // barre - marge top layout
     }
 
 

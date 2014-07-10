@@ -1,7 +1,14 @@
 html.posts,
-html.posts body {
+html.posts body,
+html.posts .ember-view.application-view,
+html.posts .ember-view.posts-view {
   height: 100%;
   overflow: hidden;
+}
+html.posts #layout {
+  height: calc(100% -  40px  - 1rem);
+  height: -webkit-calc(100% -  40px  - 1rem);
+  height: -moz-calc(100% -  40px  - 1rem);
 }
 html.posts #postlist {
   background: white;
@@ -303,11 +310,6 @@ html.posts #main button {
 html.posts #postlist,
 html.posts #main {
   height: 100%;
-}
-html.posts #layout {
-  height: calc(100% -  40px  - 1rem);
-  height: -webkit-calc(100% -  40px  - 1rem);
-  height: -moz-calc(100% -  40px  - 1rem);
 }
 html.posts .wrapper {
   margin: 0 auto;

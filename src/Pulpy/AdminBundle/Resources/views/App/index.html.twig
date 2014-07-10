@@ -35,12 +35,12 @@
                         <ol class="posts">
                         {{#each post in model}}
                         <li>
-                            <a href="#">
+                            {{#link-to 'posts.view' post }}
                                 <h3>{{ post.title }}</h3>
                                 <section class="post-meta">
                                     <span class="post-content">{{ post.intro }}</span>
                                 </section>
-                            </a>
+                            {{/link-to}}
                         </li>
                         {{/each}}
                         </ol>
@@ -53,10 +53,11 @@
     </div>
 
     <div id="main" ng-controller="PostsPreviewController as postpreviewCtrl">
+        <script type="text/x-handlebars" id="posts.view">
         <div>
             <header>
                 <div class="inner">
-                    <span>Published by {{ postpreviewCtrl.post.author.email }}</span>
+                    <span>Published by {{ model.author.email }}</span>
 
                     <div class="pull-right">
                         <button class="btn btn-sm btn-default"><i class="fa fa-plus"></i></button>
@@ -67,16 +68,17 @@
                 <div class="wrapper">
                     <div class="scroller">
                         <div class="innerwrapper">
-                        <h1>{{ postpreviewCtrl.post.title }}</h1>
+                        <h1>{{ model.title }}</h1>
 
-                        {{ postpreviewCtrl.post.intro }}
+                        {{ model.intro }}
 
-                        {{ postpreviewCtrl.post.content }}
+                        {{ model.content }}
                         </div>
                     </div>
                 </div>
             </section>
         </div>
+        </script>
     </div>
 </div>
 </script>
