@@ -12,29 +12,22 @@ DS.RESTAdapter.reopen(
   namespace: 'api'
 )
 
-###
-PulpyAdmin.ApplicationSerializer = DS.RESTSerializer.extend(
-    normalize: (type, hash, prop) ->
-        console.log(type)
-        normalizedPayload = {}
-        normalizedPayload[type.typeKey] = hash
-        normalizedPayload
-)
-###
-
 PulpyAdmin.Router.map () ->
     @resource 'posts', () ->
-        @resource 'posts.view', { path: '/view/:posts_id' }
+        @route 'view', { path: '/view/:post_id' }
 
 PulpyAdmin.PostsRoute = Ember.Route.extend(
     model: () ->
         @store.findAll('post')
 )
 
+PulpyAdmin.PostsViewController = Ember.ObjectController.extend({})
+
 PulpyAdmin.Post = DS.Model.extend(
     title: DS.attr('string'),
     intro: DS.attr('string'),
-    content: DS.attr('string')
+    content: DS.attr('string'),
+    author: DS.belongsTo('appuser')
 )
 
 PulpyAdmin.Appuser = DS.Model.extend(
@@ -44,12 +37,18 @@ PulpyAdmin.Appuser = DS.Model.extend(
     twitter: DS.attr('string')
 )
 
-#PulpyAdmin.PostsController = Ember.ArrayController.extend({})
-
 PulpyAdmin.PostsView = Ember.View.extend(
   classNames: ['posts-view']
 )
 
 PulpyAdmin.ApplicationView = Ember.View.extend(
   classNames: ['application-view']
+)
+
+PulpyAdmin.ActivableLiComponent = Ember.Component.extend(
+    tagName: 'li',
+    classNameBindings: ['active'],
+    active: (->
+        return @get('childViews').anyBy('active')
+    ).property('childViews.@each.active')
 )

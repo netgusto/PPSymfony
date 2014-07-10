@@ -5,11 +5,24 @@
 {% block body %}{% verbatim %}
 
 <script type="text/x-handlebars">
-{{outlet}}
-</script>
 
-<script type="text/x-handlebars" id="index">
-    <p>{{#link-to 'posts'}}Les posts{{/link-to}}</p>
+<div id="bar">
+    <div class="leftside pull-left">
+        <ul class="buttons"><!-- @ws
+            --><li class="brand"><a href="#"><i class="icon-pp-lemon fa-2x"></i></a></li><!-- @ws 
+            --><li class="active">{{#link-to 'posts'}}<i class="fa fa-cubes"></i> Content{{/link-to}}</li><!-- @ws
+            --><li><a href="#"><i class="fa fa-plus"></i> New post</a></li><!-- @ws
+            --><li><a href="#"><i class="fa fa-cog"></i> Settings</a></li><!-- @ws
+        --></ul>
+    </div>
+    <div class="rightside pull-right">
+        <ul class="logout"><!-- @ws
+            --><li style="line-height: 40px;"><a href="#"><i class="fa fa-eject"></i> Username <span class="avatar" style="background-image: url(#)" /></a></li><!-- @ws 
+        --></ul>
+    </div>
+</div>
+
+{{outlet}}
 </script>
 
 
@@ -34,14 +47,16 @@
                     <div class="scroller">
                         <ol class="posts">
                         {{#each post in model}}
-                        <li>
-                            {{#link-to 'posts.view' post }}
-                                <h3>{{ post.title }}</h3>
-                                <section class="post-meta">
-                                    <span class="post-content">{{ post.intro }}</span>
-                                </section>
-                            {{/link-to}}
-                        </li>
+                            
+                            {{#activable-li}}
+                                {{#link-to 'posts.view' post }}
+                                    <h3>{{ post.title }}</h3>
+                                    <section class="post-meta">
+                                        <span class="post-content">{{ post.intro }}</span>
+                                    </section>
+                                {{/link-to}}
+                            {{/activable-li}}
+
                         {{/each}}
                         </ol>
                     </div>
@@ -52,35 +67,41 @@
         </div>
     </div>
 
-    <div id="main" ng-controller="PostsPreviewController as postpreviewCtrl">
-        <script type="text/x-handlebars" id="posts.view">
-        <div>
-            <header>
-                <div class="inner">
-                    <span>Published by {{ model.author.email }}</span>
-
-                    <div class="pull-right">
-                        <button class="btn btn-sm btn-default"><i class="fa fa-plus"></i></button>
-                    </div>
-                </div>
-            </header>
-            <section class="content-preview">
-                <div class="wrapper">
-                    <div class="scroller">
-                        <div class="innerwrapper">
-                        <h1>{{ model.title }}</h1>
-
-                        {{ model.intro }}
-
-                        {{ model.content }}
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-        </script>
+    <div id="main">
+        {{outlet}}
     </div>
 </div>
+</script>
+
+<script type="text/x-handlebars" id="posts/view">
+<div>
+    <header>
+        <div class="inner">
+            <span>Published by {{ model.author.email }}</span>
+
+            <div class="pull-right">
+                <button class="btn btn-sm btn-default"><i class="fa fa-plus"></i></button>
+            </div>
+        </div>
+    </header>
+    <section class="content-preview">
+        <div class="wrapper">
+            <div class="scroller">
+                <div class="innerwrapper">
+                <h1>{{ model.title }}</h1>
+
+                {{ model.intro }}
+
+                {{ model.content }}
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</script>
+
+<script type="text/x-handlebars" id="components/activable-li">
+{{yield}}
 </script>
 
 {% endverbatim %}{% endblock body %}

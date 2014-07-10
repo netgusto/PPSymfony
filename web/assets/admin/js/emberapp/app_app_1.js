@@ -15,21 +15,10 @@
     namespace: 'api'
   });
 
-
-  /*
-  PulpyAdmin.ApplicationSerializer = DS.RESTSerializer.extend(
-      normalize: (type, hash, prop) ->
-          console.log(type)
-          normalizedPayload = {}
-          normalizedPayload[type.typeKey] = hash
-          normalizedPayload
-  )
-   */
-
   PulpyAdmin.Router.map(function() {
     return this.resource('posts', function() {
-      return this.resource('posts.view', {
-        path: '/view/:posts_id'
+      return this.route('view', {
+        path: '/view/:post_id'
       });
     });
   });
@@ -40,10 +29,13 @@
     }
   });
 
+  PulpyAdmin.PostsViewController = Ember.ObjectController.extend({});
+
   PulpyAdmin.Post = DS.Model.extend({
     title: DS.attr('string'),
     intro: DS.attr('string'),
-    content: DS.attr('string')
+    content: DS.attr('string'),
+    author: DS.belongsTo('appuser')
   });
 
   PulpyAdmin.Appuser = DS.Model.extend({
@@ -59,6 +51,14 @@
 
   PulpyAdmin.ApplicationView = Ember.View.extend({
     classNames: ['application-view']
+  });
+
+  PulpyAdmin.ActivableLiComponent = Ember.Component.extend({
+    tagName: 'li',
+    classNameBindings: ['active'],
+    active: (function() {
+      return this.get('childViews').anyBy('active');
+    }).property('childViews.@each.active')
   });
 
 }).call(this);
