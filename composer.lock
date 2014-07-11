@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "87c9928f8242db1c487e92ee4ef1d4f1",
+    "hash": "46582bd1d80323af2c483ba3a9cfdd24",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1709,6 +1709,17 @@
             "time": "2013-08-09 17:09:19"
         },
         {
+            "name": "markedjs/markedjs",
+            "version": "0.3.2",
+            "dist": {
+                "type": "file",
+                "url": "http://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
             "name": "modernizr/modernizr",
             "version": "2.7.1",
             "dist": {
@@ -2973,6 +2984,17 @@
             "dist": {
                 "type": "zip",
                 "url": "http://purecss.io/layouts/side-menu/download",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
+            "name": "zipball/upndown",
+            "version": "0.0.7",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/netgusto/upndown/archive/v0.0.7.zip",
                 "reference": null,
                 "shasum": null
             },

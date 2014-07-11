@@ -16,11 +16,13 @@
   });
 
   PulpyAdmin.Router.map(function() {
-    return this.resource('posts', function() {
+    this.resource('posts', function() {
       return this.route('view', {
         path: '/view/:post_id'
       });
     });
+    this.route('newpost');
+    return this.route('settings');
   });
 
   PulpyAdmin.PostsRoute = Ember.Route.extend({
@@ -29,7 +31,12 @@
     }
   });
 
-  PulpyAdmin.PostsViewController = Ember.ObjectController.extend({});
+  PulpyAdmin.PostsViewController = Ember.ObjectController.extend({
+    htmlbody: (function() {
+      console.log('ICIII - ' + new upndown().convert(this.get('model.content')));
+      return marked(this.get('model.content'));
+    }).property('model.content')
+  });
 
   PulpyAdmin.Post = DS.Model.extend({
     title: DS.attr('string'),

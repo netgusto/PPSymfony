@@ -59,7 +59,10 @@
         "ember/ember": "1.6.0",
         "ember/ember-debug": "1.6.0",
         "ember/ember-data": "1.0.0-beta.8",
-        "handlebars/handlebars": "1.3.0"
+        "handlebars/handlebars": "1.3.0",
+
+        "markedjs/markedjs": "0.3.2",
+        "zipball/upndown": "0.0.7"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
@@ -252,6 +255,28 @@
                     "type": "file"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "markedjs/markedjs",
+                "version": "0.3.2",
+                "dist": {
+                    "url": "http://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js",
+                    "type": "file"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "zipball/upndown",
+                "version": "0.0.7",
+                "dist": {
+                    "url": "https://github.com/netgusto/upndown/archive/v0.0.7.zip",
+                    "type": "zip"
+                }
+            }
         }
     ],
     "scripts": {
@@ -319,7 +344,11 @@
                 "ember/ember",
                 "ember/ember-debug",
                 "ember/ember-data",
-                "handlebars/handlebars"
+                "handlebars/handlebars",
+
+                "markedjs/markedjs",
+
+                "zipball/upndown"
             ]
         }
     }

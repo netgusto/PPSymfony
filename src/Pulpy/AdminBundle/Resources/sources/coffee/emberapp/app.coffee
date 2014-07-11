@@ -1,4 +1,4 @@
-# global Ember, DS, Aerowrite:true
+# global Ember, DS, marked
 Ember.LOG_BINDINGS = true
 
 PulpyAdmin = Ember.Application.create(
@@ -15,13 +15,20 @@ DS.RESTAdapter.reopen(
 PulpyAdmin.Router.map () ->
     @resource 'posts', () ->
         @route 'view', { path: '/view/:post_id' }
+    @route 'newpost'
+    @route 'settings'
 
 PulpyAdmin.PostsRoute = Ember.Route.extend(
     model: () ->
         @store.findAll('post')
 )
 
-PulpyAdmin.PostsViewController = Ember.ObjectController.extend({})
+PulpyAdmin.PostsViewController = Ember.ObjectController.extend(
+    htmlbody: (->
+        console.log('ICIII - ' + new upndown().convert(@get('model.content')))
+        marked(@get('model.content'))
+    ).property('model.content')
+)
 
 PulpyAdmin.Post = DS.Model.extend(
     title: DS.attr('string'),
